@@ -41,7 +41,7 @@ class Complex {
 	public: 
 		T modulus() { return ::sqrt(re*re + im*im); }
 	public:
-		inline Complex<T> operator+(Complex<T> &that) { 
+		inline Complex<T> operator+(Complex<T> that) { 
 			return Complex(re+that.re, im+that.im);
 		}
 	public:
@@ -49,7 +49,7 @@ class Complex {
 			return Complex(re+k, im);
 		}
 	public:
-		inline Complex<T> operator-(Complex<T> &that) { 
+		inline Complex<T> operator-(Complex<T> that) { 
 			return Complex(re-that.re, im-that.im);
 		}
 	public:
@@ -61,7 +61,7 @@ class Complex {
 			return re == that.re && im == that.im;
 		}
 	public:
-		inline Complex<T> operator*(Complex<T> &that) {
+		inline Complex<T> operator*(Complex<T> that) {
 			return Complex(re*that.re-im*that.im,re*that.im+im*that.re);
 		}
 	public:
@@ -78,7 +78,7 @@ class Complex {
 			return Complex(re/denom, -im/denom);
 		}
 	public:
-		inline Complex<T> operator/ (Complex<T> &c2) {
+		inline Complex<T> operator/ (Complex<T> c2) {
 			T denom = c2.re*c2.re + c2.im*c2.im;
 			return Complex(
 				(re*c2.re + im*c2.im)/denom,
@@ -107,6 +107,8 @@ class Complex {
 		}
 	public:
 		string stringify(int nPlaces=0);
+	public:
+		bool assertEqualT(Complex<T> that, double tolerance=0.0000001);
 };
 
 namespace ph5 {
@@ -116,10 +118,28 @@ inline Complex<T> operator*(T k, Complex<T> c) {
 }
 }
 
-typedef class CLASS_DECLSPEC ASDF {
-    public:
+template<class T>
+class CLASS_DECLSPEC PH5Curve {
+	private:
+		vector<Complex<T> > z;
+		vector<Complex<T> > q;
+		int N;
+		Complex<T> w1j[3];
+		Complex<T> wNj[3];
 
-} ASDF;
+	protected:
+		Complex<T> wij(int i, int j);
+		Complex<T> pik(int i, int k);
+		Complex<T> rit(int i, T p);
+
+    public:
+		PH5Curve(vector<Complex<T> > phz, vector<Complex<T> > phq);
+		Complex<T> r(T p);
+
+};
+
+extern int choose5[6];
+extern int choose6[7];
 
 } // namespace ph5
 

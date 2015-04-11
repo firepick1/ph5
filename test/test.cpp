@@ -15,6 +15,8 @@ using namespace ph5;
 #endif
 
 void test_Complex() {
+    cout << "test_Complex()" << endl;
+
 	Complex<float> c1(1,2);
 	ASSERTEQUAL(c1.Re(), 1);
 	ASSERTEQUAL(c1.Im(), 2);
@@ -75,15 +77,45 @@ void test_Complex() {
 	ASSERTEQUALS("1.0+1.0i", Complex<float>(0.99,0.99).stringify(1).c_str());
 	ASSERTEQUALS("1.0-1.0i", Complex<float>(0.99,-0.99).stringify(1).c_str());
 	ASSERTEQUALS("0.99-0.99i", Complex<float>(0.99,-0.99).stringify(2).c_str());
+
+	c13.assertEqualT(Complex<float>(1.0009,2.9991), 0.001);
+	cout << "test_Complex() OK" << endl;
 }
 
-int main(int argc, char *argv[])
-{
+void test_PH5Curve() {
+    cout << "test_PH5Curve()" << endl;
+	vector<Complex<float> > q;
+	vector<Complex<float> > z;
+	q.push_back(Complex<float>(-1,1));
+	q.push_back(Complex<float>(0,2));
+	q.push_back(Complex<float>(1,1));
+	z.push_back(Complex<float>());
+	z.push_back(Complex<float>(1.124171968973597,0.444771808762066));
+	z.push_back(Complex<float>(1.124171968973597,-0.444771808762066));
+	PH5Curve<float> ph(z,q);
+
+	float epsilon = 0.000001;
+	Complex<float> c;
+	c = ph.r(0);
+	c.assertEqualT(Complex<float>(-1,1), epsilon);
+	c = ph.r(0.25);
+	c.assertEqualT(Complex<float>(-0.598911,1.75), epsilon);
+	c = ph.r(0.5);
+	c.assertEqualT(Complex<float>(0,2), epsilon);
+	c = ph.r(0.75);
+	c.assertEqualT(Complex<float>(0.598911,1.75), epsilon);
+	c = ph.r(1.0);
+	c.assertEqualT(Complex<float>(1,1), epsilon);
+
+	cout << "test_PH5Curve() OK" << endl;
+}
+
+int main(int argc, char *argv[]) {
     LOGINFO3("ph5 test v%d.%d.%d", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
     firelog_level(FIRELOG_TRACE);
 
-    cout << "test_Complex()" << endl;
     test_Complex();
+    test_PH5Curve();
 
     cout << "END OF TEST main()" << endl;
 }

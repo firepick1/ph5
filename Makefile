@@ -243,6 +243,30 @@ FireLog.cpp.s:
 	$(MAKE) -f CMakeFiles/_ph5.dir/build.make CMakeFiles/_ph5.dir/FireLog.cpp.s
 .PHONY : FireLog.cpp.s
 
+PH5Curve.o: PH5Curve.cpp.o
+.PHONY : PH5Curve.o
+
+# target to build an object file
+PH5Curve.cpp.o:
+	$(MAKE) -f CMakeFiles/_ph5.dir/build.make CMakeFiles/_ph5.dir/PH5Curve.cpp.o
+.PHONY : PH5Curve.cpp.o
+
+PH5Curve.i: PH5Curve.cpp.i
+.PHONY : PH5Curve.i
+
+# target to preprocess a source file
+PH5Curve.cpp.i:
+	$(MAKE) -f CMakeFiles/_ph5.dir/build.make CMakeFiles/_ph5.dir/PH5Curve.cpp.i
+.PHONY : PH5Curve.cpp.i
+
+PH5Curve.s: PH5Curve.cpp.s
+.PHONY : PH5Curve.s
+
+# target to generate assembly for a file
+PH5Curve.cpp.s:
+	$(MAKE) -f CMakeFiles/_ph5.dir/build.make CMakeFiles/_ph5.dir/PH5Curve.cpp.s
+.PHONY : PH5Curve.cpp.s
+
 ph5.o: ph5.cpp.o
 .PHONY : ph5.o
 
@@ -314,6 +338,9 @@ help:
 	@echo "... FireLog.o"
 	@echo "... FireLog.i"
 	@echo "... FireLog.s"
+	@echo "... PH5Curve.o"
+	@echo "... PH5Curve.i"
+	@echo "... PH5Curve.s"
 	@echo "... ph5.o"
 	@echo "... ph5.i"
 	@echo "... ph5.s"

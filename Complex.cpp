@@ -11,11 +11,15 @@
 using namespace std;
 using namespace ph5;
 
-//namespace ph5 {
-
 template<class T>
 Complex<T>::Complex(T re, T im) 
 	: re(re), im(im) {
+}
+
+template<class T>
+bool Complex<T>::assertEqualT(Complex<T> that, double tolerance) {
+	ASSERTEQUALT(that.re, re, tolerance);
+	ASSERTEQUALT(that.im, im, tolerance);
 }
 
 template<class T>
@@ -55,7 +59,3 @@ string Complex<T>::stringify(int nPlaces) {
 
 template class Complex<float>;
 template class Complex<double>;
-
-
-//}; // namespace ph5
-
