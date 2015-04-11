@@ -1,3 +1,11 @@
+target
+cmake_install.cmake
+CMakeCache.txt
+CMakeFiles/*
+core
+CPackConfig.cmake
+CPackSourceConfig.cmake
+
 # Compiled Object files
 *.slo
 *.lo

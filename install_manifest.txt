@@ -1,0 +1,6 @@
+/usr/lib/lib_ph5.so.0.1.0
+/usr/lib/lib_ph5.so.0
+/usr/lib/lib_ph5.so
+/usr/bin/ph5
+/usr/include/FireLog.h
+/usr/include/ph5.hpp
