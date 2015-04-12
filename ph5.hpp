@@ -23,9 +23,6 @@ using namespace std;
 
 namespace ph5 {
 
-CLASS_DECLSPEC typedef map<string, const char *> ArgMap;
-CLASS_DECLSPEC extern ArgMap emptyMap;
-
 template <class T>
 class Complex {
 	private:
@@ -132,21 +129,43 @@ class CLASS_DECLSPEC PH5Curve {
 		vector<Complex<T> > pi3;
 		vector<Complex<T> > pi4;
 		vector<Complex<T> > pi5;
+		vector<T> sigmai0;
+		vector<T> sigmai1;
+		vector<T> sigmai2;
+		vector<T> sigmai3;
+		vector<T> sigmai4;
 		int N;
 
 	protected:
 		Complex<T> calc_wij(int i, int j);
 		Complex<T> pik(int i, int k);
 		Complex<T> rit(int i, T p);
+		T sit(int i, T p);
+		T sik(int i, int j);
+		T sigmaij(int i, int j);
 
     public:
 		PH5Curve(vector<Complex<T> > phz, vector<Complex<T> > phq);
 		Complex<T> r(T p);
+		T s(T p);
 
 };
 
 extern int choose5[6];
 extern int choose6[7];
+
+template <class T>
+T Bernstein5(int k, T p) {
+	T result = choose5[k];
+	T p1 = 1 - p;
+	for (int i=0; i<5-k; i++) {
+		result *= p1;
+	}
+	for (int i=0; i<k; i++) {
+		result *= p;
+	}
+	return result;
+}
 
 } // namespace ph5
 

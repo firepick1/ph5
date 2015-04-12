@@ -82,6 +82,15 @@ void test_Complex() {
 	cout << "test_Complex() OK" << endl;
 }
 
+void test_Bernstein() {
+	float  epsilon = 0.00001;
+    cout << "test_Bernstein()" << endl;
+	ASSERTEQUALT(0, Bernstein5<float>(5,0), epsilon);
+	ASSERTEQUALT(0.03125, Bernstein5<float>(5,0.5), epsilon);
+	ASSERTEQUALT(0.15625, Bernstein5<float>(1,0.5), epsilon);
+    cout << "test_Bernstein() OK" << endl;
+}
+
 void test_PH5Curve() {
     cout << "test_PH5Curve()" << endl;
 	vector<Complex<float> > q;
@@ -95,8 +104,9 @@ void test_PH5Curve() {
 	PH5Curve<float> ph(z,q);
 
 	long msStart = millis();
-	float epsilon = 0.000001;
-	for (int i=0; i<10000; i++) {
+	float epsilon = 0.00001;
+	int ITER = 10000;
+	for (int i=0; i<ITER; i++) {
 		Complex<float> c;
 		c = ph.r(0);
 		c.assertEqualT(Complex<float>(-1,1), epsilon);
@@ -110,6 +120,11 @@ void test_PH5Curve() {
 		c.assertEqualT(Complex<float>(1,1), epsilon);
 	}
 	long msElapsed = millis() - msStart;
+	cout << "r() " << msElapsed/(ITER/5000) << "us" << endl;
+
+	ASSERTEQUALT(0.00000, ph.s(0.0), epsilon);
+	ASSERTEQUALT(1.52753, ph.s(0.5), epsilon);
+	ASSERTEQUALT(3.05505, ph.s(1.0), epsilon);
 
 	cout << "test_PH5Curve() OK " << msElapsed << "ms" << endl;
 }
@@ -119,6 +134,7 @@ int main(int argc, char *argv[]) {
     firelog_level(FIRELOG_TRACE);
 
     test_Complex();
+	test_Bernstein();
     test_PH5Curve();
 
     cout << "END OF TEST main()" << endl;
