@@ -10,10 +10,6 @@
 using namespace std;
 using namespace ph5;
 
-#ifdef JS
-})
-#endif
-
 void test_Complex() {
     cout << "TEST	: test_Complex()" << endl;
 
