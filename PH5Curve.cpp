@@ -25,16 +25,29 @@ PH5Curve<T>::PH5Curve(vector<Complex<T> > phz, vector<Complex<T> > phq) {
 	this->z = phz;
 	this->q = phq;
 	this->N = phz.size() - 1;
-	//for (int i=0; i<=N; i++) {
-		//cout << "z[" << i << "]:" << this->z[i].stringify() 
-			//<< " q[" << i << "]:" << this->q[i].stringify() << endl;
-	//}
-	w1j[0] = (z[1]*3 - z[2])/2;
-	w1j[1] = z[1];
-	w1j[2] = (z[1] + z[2])/2;
-	wNj[0] = (z[N-1] + z[N])/2;
-	wNj[1] = z[N];
-	wNj[2] = (z[N]*3 - z[N-1])/2;
+
+	wi0.push_back(Complex<T>());
+	wi1.push_back(Complex<T>());
+	wi2.push_back(Complex<T>());
+	for (int i=1; i<=N; i++) {
+		wi0.push_back(calc_wij(i,0));
+		wi1.push_back(calc_wij(i,1));
+		wi2.push_back(calc_wij(i,2));
+	}
+	pi0.push_back(Complex<T>());
+	pi1.push_back(Complex<T>());
+	pi2.push_back(Complex<T>());
+	pi3.push_back(Complex<T>());
+	pi4.push_back(Complex<T>());
+	pi5.push_back(Complex<T>());
+	for (int i=1; i<=N; i++) {
+		pi0.push_back(pik(i,0));
+		pi1.push_back(pik(i,1));
+		pi2.push_back(pik(i,2));
+		pi3.push_back(pik(i,3));
+		pi4.push_back(pik(i,4));
+		pi5.push_back(pik(i,5));
+	}
 }
 
 template<class T>
@@ -45,56 +58,63 @@ Complex<T> PH5Curve<T>::r(T p) {
 }
 
 template<class T>
-Complex<T> PH5Curve<T>::rit(int i, T p) {
+Complex<T> PH5Curve<T>::rit(int i, T e) {
 	Complex<T> sum;
-	T p1 = 1 - p;
-	T pk[6];
-	T p1k[6];
-	pk[0] = p1k[5] = 1;
-	T Pprod = 1;
-	T P1prod = 1;
-	//cout << "P:" << Pprod << " P1:" << P1prod << endl;
+	T e1 = 1 - e;
+	T ek[6];
+	T e1k[6];
+	ek[0] = e1k[5] = 1;
+	T Eprod = 1;
+	T E1prod = 1;
 	for (int k=1; k<=5; k++) {
-		Pprod = pk[k] = p*Pprod;
-		P1prod = p1k[5-k] = p1*P1prod;
-		//cout << "P:" << Pprod << " P1:" << P1prod << endl;
+		ek[k] = Eprod = e*Eprod;
+		e1k[5-k] = E1prod = e1*E1prod;
 	}
-	for (int k=0; k<=5; k++) {
-		T re = choose5[k] * p1k[k] * pk[k];
-		//cout << " re" << k << ":" << re << " pik:" << pik(i,k).stringify() << endl;
-		sum.add(pik(i,k)*re);
-	}
-	//cout << " rit:" << sum.stringify() << endl;
+	sum.add(pi0[i]*(choose5[0]*e1k[0]*ek[0]));
+	sum.add(pi1[i]*(choose5[1]*e1k[1]*ek[1]));
+	sum.add(pi2[i]*(choose5[2]*e1k[2]*ek[2]));
+	sum.add(pi3[i]*(choose5[3]*e1k[3]*ek[3]));
+	sum.add(pi4[i]*(choose5[4]*e1k[4]*ek[4]));
+	sum.add(pi5[i]*(choose5[5]*e1k[5]*ek[5]));
 	return sum;
 }
 
 template<class T>
-Complex<T> PH5Curve<T>::wij(int i, int j) {
+Complex<T> PH5Curve<T>::calc_wij(int i, int j) {
 	if (i == 1) {
-		return w1j[j];
+		switch (j) {
+		case 0: return (z[1]*3 - z[2])/2;
+		case 1: return z[1];
+		case 2: return (z[1] + z[2])/2;
+		default: ASSERTFAIL("w1?");
+		}
 	}
 	if (i == N) {
-		return wNj[j];
+		switch (j) {
+		case 0: return (z[N-1] + z[N])/2;
+		case 1: return z[N];
+		case 2: return (z[N]*3 - z[N-1])/2;
+		default: ASSERTFAIL("wN?");
+		}
 	}
 	switch (j) {
 	case 0: return (z[i-1]+z[i])/2;
 	case 1: return z[i];
 	case 2: return (z[i]+z[i+1])/2;
-	default: ASSERTFAIL("wij j");
+	default: ASSERTFAIL("calc_wij j");
 	}
 }
-
 template<class T>
 Complex<T> PH5Curve<T>::pik(int i, int k) {
 	ASSERT(i > 0);
 	ASSERT(i <= N);
 	switch (k) {
 	case 0: return q[i-1];
-	case 1: return pik(i,0) + wij(i,0)*wij(i,0)/5;
-	case 2: return pik(i,1) + wij(i,0)*wij(i,1)/5;
-	case 3: return pik(i,2) + wij(i,1)*wij(i,1)*2/15 + wij(i,0)*wij(i,2)/15;
-	case 4: return pik(i,3) + wij(i,1)*wij(i,2)/5;
-	case 5: return pik(i,4) + wij(i,2)*wij(i,2)/5;
+	case 1: return pik(i,0) + wi0[i]*wi0[i]/5;
+	case 2: return pik(i,1) + wi0[i]*wi1[i]/5;
+	case 3: return pik(i,2) + wi1[i]*wi1[i]*2/15 + wi0[i]*wi2[i]/15;
+	case 4: return pik(i,3) + wi1[i]*wi2[i]/5;
+	case 5: return pik(i,4) + wi2[i]*wi2[i]/5;
 	default: ASSERTFAIL("invalid k");
 	}
 }

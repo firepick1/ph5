@@ -123,12 +123,19 @@ class CLASS_DECLSPEC PH5Curve {
 	private:
 		vector<Complex<T> > z;
 		vector<Complex<T> > q;
+		vector<Complex<T> > wi0;
+		vector<Complex<T> > wi1;
+		vector<Complex<T> > wi2;
+		vector<Complex<T> > pi0;
+		vector<Complex<T> > pi1;
+		vector<Complex<T> > pi2;
+		vector<Complex<T> > pi3;
+		vector<Complex<T> > pi4;
+		vector<Complex<T> > pi5;
 		int N;
-		Complex<T> w1j[3];
-		Complex<T> wNj[3];
 
 	protected:
-		Complex<T> wij(int i, int j);
+		Complex<T> calc_wij(int i, int j);
 		Complex<T> pik(int i, int k);
 		Complex<T> rit(int i, T p);
 

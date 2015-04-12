@@ -174,3 +174,27 @@ void firelog(const char *msg, int level) {
     }
 #endif
 }
+
+static struct tm tmLocalNow() {
+    timeval tp;
+    gettimeofday(&tp, 0);
+    time_t curtime = tp.tv_sec;
+    return *localtime(&curtime);
+}
+
+static struct tm tmStart = tmLocalNow();
+
+long millis() {
+    struct tm tmNow = tmLocalNow();
+    long result = tmNow.tm_year - tmStart.tm_year;
+    result = result * 365 + (tmNow.tm_yday - tmStart.tm_yday);
+    result = result * 24 + (tmNow.tm_hour - tmStart.tm_hour);
+    result = result * 60 + (tmNow.tm_min - tmStart.tm_min);
+    result = result * 60 + (tmNow.tm_sec - tmStart.tm_sec);
+
+    timeval tp;
+    gettimeofday(&tp, 0);
+    result = result * 1000 + tp.tv_usec/1000;
+    return result;
+}
+

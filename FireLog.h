@@ -117,6 +117,7 @@ extern "C" {
      * Use logging defines instead.
      */
     CLASS_DECLSPEC void firelog(const char *msg, int level);
+	long millis();
 
 #ifdef __cplusplus
 }

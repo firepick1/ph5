@@ -94,20 +94,24 @@ void test_PH5Curve() {
 	z.push_back(Complex<float>(1.124171968973597,-0.444771808762066));
 	PH5Curve<float> ph(z,q);
 
+	long msStart = millis();
 	float epsilon = 0.000001;
-	Complex<float> c;
-	c = ph.r(0);
-	c.assertEqualT(Complex<float>(-1,1), epsilon);
-	c = ph.r(0.25);
-	c.assertEqualT(Complex<float>(-0.598911,1.75), epsilon);
-	c = ph.r(0.5);
-	c.assertEqualT(Complex<float>(0,2), epsilon);
-	c = ph.r(0.75);
-	c.assertEqualT(Complex<float>(0.598911,1.75), epsilon);
-	c = ph.r(1.0);
-	c.assertEqualT(Complex<float>(1,1), epsilon);
+	for (int i=0; i<10000; i++) {
+		Complex<float> c;
+		c = ph.r(0);
+		c.assertEqualT(Complex<float>(-1,1), epsilon);
+		c = ph.r(0.25);
+		c.assertEqualT(Complex<float>(-0.598911,1.75), epsilon);
+		c = ph.r(0.5);
+		c.assertEqualT(Complex<float>(0,2), epsilon);
+		c = ph.r(0.75);
+		c.assertEqualT(Complex<float>(0.598911,1.75), epsilon);
+		c = ph.r(1.0);
+		c.assertEqualT(Complex<float>(1,1), epsilon);
+	}
+	long msElapsed = millis() - msStart;
 
-	cout << "test_PH5Curve() OK" << endl;
+	cout << "test_PH5Curve() OK " << msElapsed << "ms" << endl;
 }
 
 int main(int argc, char *argv[]) {
