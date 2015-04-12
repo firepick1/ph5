@@ -15,7 +15,7 @@ using namespace ph5;
 #endif
 
 void test_Complex() {
-    cout << "test_Complex()" << endl;
+    cout << "TEST	: test_Complex()" << endl;
 
 	Complex<float> c1(1,2);
 	ASSERTEQUAL(c1.Re(), 1);
@@ -79,20 +79,20 @@ void test_Complex() {
 	ASSERTEQUALS("0.99-0.99i", Complex<float>(0.99,-0.99).stringify(2).c_str());
 
 	c13.assertEqualT(Complex<float>(1.0009,2.9991), 0.001);
-	cout << "test_Complex() OK" << endl;
+	cout << "TEST	:   test_Complex() OK" << endl;
 }
 
 void test_Bernstein() {
 	float  epsilon = 0.00001;
-    cout << "test_Bernstein()" << endl;
+    cout << "TEST	: test_Bernstein()" << endl;
 	ASSERTEQUALT(0, Bernstein5<float>(5,0), epsilon);
 	ASSERTEQUALT(0.03125, Bernstein5<float>(5,0.5), epsilon);
 	ASSERTEQUALT(0.15625, Bernstein5<float>(1,0.5), epsilon);
-    cout << "test_Bernstein() OK" << endl;
+    cout << "TEST	:   test_Bernstein() OK" << endl;
 }
 
 void test_PH5Curve() {
-    cout << "test_PH5Curve()" << endl;
+    cout << "TEST	: test_PH5Curve()" << endl;
 	vector<Complex<float> > q;
 	vector<Complex<float> > z;
 	q.push_back(Complex<float>(-1,1));
@@ -120,7 +120,7 @@ void test_PH5Curve() {
 		c.assertEqualT(Complex<float>(1,1), epsilon);
 	}
 	long msElapsed = millis() - msStart;
-	cout << "r() " << msElapsed/(ITER/5000) << "us" << endl;
+	cout << "TEST	:   average execution time for r(): " << msElapsed/(ITER/5000) << "us" << endl;
 
 	ASSERTEQUALT(0.00000, ph.s(0.0), epsilon);
 	ASSERTEQUALT(1.52753, ph.s(0.5), epsilon);
@@ -132,16 +132,23 @@ void test_PH5Curve() {
 	ASSERTEQUALT(2.78074, ph.sigma(0.7), epsilon);
 	ASSERTEQUALT(4.11010, ph.sigma(1.0), epsilon);
 
-	cout << "test_PH5Curve() OK " << msElapsed << "ms" << endl;
+	epsilon = 0.001;
+	ph.rprime(0.00).assertEqualT(Complex<float>(0.945, 4.000), epsilon);
+	ph.rprime(0.25).assertEqualT(Complex<float>(2.132, 2.000), epsilon);
+	ph.rprime(0.50).assertEqualT(Complex<float>(2.528, 0.000), epsilon);
+	ph.rprime(0.75).assertEqualT(Complex<float>(2.132,-2.000), epsilon);
+	ph.rprime(1.00).assertEqualT(Complex<float>(0.945,-4.000), epsilon);
+
+	cout << "TEST	:   test_PH5Curve() OK " << endl;
 }
 
 int main(int argc, char *argv[]) {
-    LOGINFO3("ph5 test v%d.%d.%d", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
+    LOGINFO3("INFO	: ph5 test v%d.%d.%d", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
     firelog_level(FIRELOG_TRACE);
 
     test_Complex();
 	test_Bernstein();
     test_PH5Curve();
 
-    cout << "END OF TEST main()" << endl;
+    cout << "TEST	: END OF TEST main()" << endl;
 }
