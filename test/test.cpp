@@ -126,6 +126,12 @@ void test_PH5Curve() {
 	ASSERTEQUALT(1.52753, ph.s(0.5), epsilon);
 	ASSERTEQUALT(3.05505, ph.s(1.0), epsilon);
 
+	ASSERTEQUALT(4.11010, ph.sigma(0.0), epsilon);
+	ASSERTEQUALT(2.78074, ph.sigma(0.3), epsilon);
+	ASSERTEQUALT(2.52753, ph.sigma(0.5), epsilon);
+	ASSERTEQUALT(2.78074, ph.sigma(0.7), epsilon);
+	ASSERTEQUALT(4.11010, ph.sigma(1.0), epsilon);
+
 	cout << "test_PH5Curve() OK " << msElapsed << "ms" << endl;
 }
 

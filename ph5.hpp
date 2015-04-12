@@ -143,12 +143,14 @@ class CLASS_DECLSPEC PH5Curve {
 		T sit(int i, T p);
 		T sik(int i, int j);
 		T sigmaij(int i, int j);
+		Complex<T> ritprime(int i, T p);
 
     public:
 		PH5Curve(vector<Complex<T> > phz, vector<Complex<T> > phq);
 		Complex<T> r(T p);
 		T s(T p);
-
+		T sigma(T p);
+		Complex<T> rprime(T p);
 };
 
 extern int choose5[6];

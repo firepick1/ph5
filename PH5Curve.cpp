@@ -63,6 +63,40 @@ PH5Curve<T>::PH5Curve(vector<Complex<T> > phz, vector<Complex<T> > phq) {
 }
 
 template<class T>
+T PH5Curve<T>::sigma(T p) {
+	return rprime(p).modulus();
+}
+
+template<class T>
+Complex<T> PH5Curve<T>::rprime(T p) {
+	ASSERT(0 <= p);
+	ASSERT(p <= 1);
+	T PN = p * N;
+	int iPN = p == 1 ? N : (((int) PN)+1);
+	return ritprime(iPN, PN-iPN+1)*N;
+}
+
+template<class T>
+Complex<T> PH5Curve<T>::ritprime(int i, T p) {
+	Complex<T> sum;
+	T p1 = 1 - p;
+	if (i == 1) {
+		sum.add((z[1]*3-z[2])*p1*p1/2.0);
+		sum.add(z[1]*2*p1*p);
+		sum.add((z[1]+z[2])*p*p/2.0);
+	} else if (i == N) {
+		sum.add((z[N]+z[N-1])*p1*p1/2.0);
+		sum.add(z[N]*2*p1*p);
+		sum.add((z[N]*3-z[N-1])*p*p/2.0);
+	} else {
+		sum.add((z[i-1]+z[i])*p1*p1/2.0);
+		sum.add(z[i]*2*p1*p);
+		sum.add((z[i]+z[i+1])*p*p/2.0);
+	}
+	return sum * sum;
+}
+
+template<class T>
 T PH5Curve<T>::s(T p) {
 	ASSERT(0 <= p);
 	ASSERT(p <= 1);
