@@ -267,6 +267,30 @@ PH5Curve.cpp.s:
 	$(MAKE) -f CMakeFiles/_ph5.dir/build.make CMakeFiles/_ph5.dir/PH5Curve.cpp.s
 .PHONY : PH5Curve.cpp.s
 
+PHFeed.o: PHFeed.cpp.o
+.PHONY : PHFeed.o
+
+# target to build an object file
+PHFeed.cpp.o:
+	$(MAKE) -f CMakeFiles/_ph5.dir/build.make CMakeFiles/_ph5.dir/PHFeed.cpp.o
+.PHONY : PHFeed.cpp.o
+
+PHFeed.i: PHFeed.cpp.i
+.PHONY : PHFeed.i
+
+# target to preprocess a source file
+PHFeed.cpp.i:
+	$(MAKE) -f CMakeFiles/_ph5.dir/build.make CMakeFiles/_ph5.dir/PHFeed.cpp.i
+.PHONY : PHFeed.cpp.i
+
+PHFeed.s: PHFeed.cpp.s
+.PHONY : PHFeed.s
+
+# target to generate assembly for a file
+PHFeed.cpp.s:
+	$(MAKE) -f CMakeFiles/_ph5.dir/build.make CMakeFiles/_ph5.dir/PHFeed.cpp.s
+.PHONY : PHFeed.cpp.s
+
 ph5.o: ph5.cpp.o
 .PHONY : ph5.o
 
@@ -341,6 +365,9 @@ help:
 	@echo "... PH5Curve.o"
 	@echo "... PH5Curve.i"
 	@echo "... PH5Curve.s"
+	@echo "... PHFeed.o"
+	@echo "... PHFeed.i"
+	@echo "... PHFeed.s"
 	@echo "... ph5.o"
 	@echo "... ph5.i"
 	@echo "... ph5.s"

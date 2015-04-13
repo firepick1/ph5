@@ -87,8 +87,7 @@ void test_Bernstein() {
     cout << "TEST	:   test_Bernstein() OK" << endl;
 }
 
-void test_PH5Curve() {
-    cout << "TEST	: test_PH5Curve()" << endl;
+PH5Curve<float> ph_arc() {
 	vector<Complex<float> > q;
 	vector<Complex<float> > z;
 	q.push_back(Complex<float>(-1,1));
@@ -97,7 +96,12 @@ void test_PH5Curve() {
 	z.push_back(Complex<float>());
 	z.push_back(Complex<float>(1.124171968973597,0.444771808762066));
 	z.push_back(Complex<float>(1.124171968973597,-0.444771808762066));
-	PH5Curve<float> ph(z,q);
+	return PH5Curve<float>(z,q);
+}
+
+void test_PH5Curve() {
+    cout << "TEST	: test_PH5Curve()" << endl;
+	PH5Curve<float> ph(ph_arc());
 
 	long msStart = millis();
 	float epsilon = 0.00001;
@@ -138,6 +142,48 @@ void test_PH5Curve() {
 	cout << "TEST	:   test_PH5Curve() OK " << endl;
 }
 
+void test_PHFeed() {
+    cout << "TEST	: test_PH5Feed()" << endl;
+	PH5Curve<float> ph(ph_arc());
+	PHFeed<float> phf(ph,100,0.01, 0,100,0);
+	float E = 0;
+	float epsilon = 0.001;
+	ASSERTEQUALT(0, ph.s(E), epsilon);
+	ph.r(E).assertEqualT(Complex<float>(-1.000, 1.000), epsilon);
+	E = phf.Ekt(E, 0.1);
+	ASSERTEQUALT(0.039, ph.s(E), epsilon);
+	ph.r(E).assertEqualT(Complex<float>(-0.990, 1.038), 0.001);
+	E = phf.Ekt(E, 0.2);
+	ASSERTEQUALT(0.313, ph.s(E), epsilon);
+	ph.r(E).assertEqualT(Complex<float>(-0.904, 1.298), 0.001);
+	E = phf.Ekt(E, 0.3);
+	ASSERTEQUALT(0.716, ph.s(E), epsilon);
+	ph.r(E).assertEqualT(Complex<float>(-0.699, 1.643), 0.001);
+	E = phf.Ekt(E, 0.4);
+	ASSERTEQUALT(1.122, ph.s(E), epsilon);
+	ph.r(E).assertEqualT(Complex<float>(-0.389, 1.901), 0.001);
+	E = phf.Ekt(E, 0.5);
+	ASSERTEQUALT(1.527, ph.s(E), epsilon);
+	ph.r(E).assertEqualT(Complex<float>(-0.000, 2.000), 0.001);
+	E = phf.Ekt(E, 0.6);
+	ASSERTEQUALT(1.933, ph.s(E), epsilon);
+	ph.r(E).assertEqualT(Complex<float>(0.389, 1.901), 0.001);
+	E = phf.Ekt(E, 0.7);
+	ASSERTEQUALT(2.338, ph.s(E), epsilon);
+	ph.r(E).assertEqualT(Complex<float>(0.699, 1.643), 0.001);
+	E = phf.Ekt(E, 0.8);
+	ASSERTEQUALT(2.741, ph.s(E), epsilon);
+	ph.r(E).assertEqualT(Complex<float>(0.904, 1.298), 0.001);
+	E = phf.Ekt(E, 0.9);
+	ASSERTEQUALT(3.015, ph.s(E), epsilon);
+	ph.r(E).assertEqualT(Complex<float>(0.990, 1.038), 0.001);
+	E = phf.Ekt(E, 1.0);
+	ASSERTEQUALT(3.055, ph.s(E), epsilon);
+	ph.r(E).assertEqualT(Complex<float>(1.000, 1.000), 0.001);
+
+	cout << "TEST	:   test_PH5Feed() OK " << endl;
+}
+
 int main(int argc, char *argv[]) {
     LOGINFO3("INFO	: ph5 test v%d.%d.%d", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
     firelog_level(FIRELOG_TRACE);
@@ -145,6 +191,7 @@ int main(int argc, char *argv[]) {
     test_Complex();
 	test_Bernstein();
     test_PH5Curve();
+	test_PHFeed();
 
     cout << "TEST	: END OF TEST main()" << endl;
 }

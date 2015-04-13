@@ -24,7 +24,7 @@ using namespace std;
 namespace ph5 {
 
 template <class T>
-class Complex {
+class CLASS_DECLSPEC Complex {
 	private:
 		T re;
 		T im;
@@ -153,6 +153,62 @@ class CLASS_DECLSPEC PH5Curve {
 		Complex<T> rprime(T p);
 };
 
+template<class T>
+class CLASS_DECLSPEC PHFeed {
+	protected:
+		PH5Curve<T> &ph;	// REQUIRED: curve to traverse
+		T vMax;				// OPTION: maximum velocity
+		T tvMax;			// OPTION: time from rest to maximum velocity
+		T vIn;				// OPTION: PH curve entry velocity
+		T vCruise;			// OPTION: PH curve constant cruise velocity
+		T vOut;				// OPTION: PH curve exit velocity
+		T S;				// curve arc length
+		T sAccel;			// acceleration arc length distance
+		T sCruise;			// cruise arc length distance
+		T sDecel;			// deceleration arc length distance
+		T tAccel;			// acceleration time
+		T tCruise;			// cruise time
+		T tDecel;			// deceleration time
+		T tS;				// total traversal time
+		T epsilon;			// Newton-Raphson convergence limit
+		int iterations;		// maximum Newton-Raphson iterations 
+		T tauCruise;
+		T tauDecel;
+		T Faccel[7];
+		T Fcruise[7];
+		T Fdecel[7];
+		inline T Vaccel(int k) { return k < 3 ? vIn : vCruise; };
+		inline T Vdecel(int k) { return k < 3 ? vCruise : vOut; };
+		T Fk(T vIn, T vOut, int k);
+		inline T Vk(T vIn, T vOut, int k) { return k<3 ? vIn : vOut; }
+
+	public:
+		PHFeed(PH5Curve<T> &ph5, T vMax=200, T tvMax=0.1, T vIn=0, T vCruise=200, T vOut=0);
+	public:
+		T F(T tau);
+	public:
+		T Ekt(T Ekprev, T tau);
+
+	public:
+		inline T sigma(T E) { return ph.sigma(E); }
+		inline T s(T E) { return ph.s(E); }
+		inline Complex<T> r(T E) { return ph.r(E); }
+		inline T get_tS() { return tS; };
+		inline T get_tAccel() { return tAccel; };
+		inline T get_tCruise() { return tCruise; };
+		inline T get_tDecel() { return tDecel; };
+		inline T get_sAccel() { return sAccel; };
+		inline T get_sCruise() { return sCruise; };
+		inline T get_sDecel() { return sDecel; };
+		inline T get_S() { return S; };
+		inline T get_vIn() { return vIn; };
+		inline T get_vCruise() { return vCruise; };
+		inline T get_vOut() { return vOut; };
+		inline T get_vMax() { return vMax; };
+		inline T get_tvMax() { return tvMax; };
+		
+};
+
 extern int choose5[6];
 extern int choose6[7];
 
@@ -161,6 +217,19 @@ T Bernstein5(int k, T p) {
 	T result = choose5[k];
 	T p1 = 1 - p;
 	for (int i=0; i<5-k; i++) {
+		result *= p1;
+	}
+	for (int i=0; i<k; i++) {
+		result *= p;
+	}
+	return result;
+}
+
+template <class T>
+T Bernstein6(int k, T p) {
+	T result = choose6[k];
+	T p1 = 1 - p;
+	for (int i=0; i<6-k; i++) {
 		result *= p1;
 	}
 	for (int i=0; i<k; i++) {

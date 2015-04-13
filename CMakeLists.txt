@@ -77,6 +77,7 @@ link_directories( ${BUILD_TARGET_DIR} /usr/lib /usr/local/lib )
 set(PH5_LIB_FILES
   Complex.cpp
   PH5Curve.cpp
+  PHFeed.cpp
   FireLog.cpp
   )
 
