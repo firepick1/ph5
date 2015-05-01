@@ -200,7 +200,7 @@ void test_SamplePHCurve() {
     // Create a quintic feedrate for traversing the above curve smoothly
     PHFeed<float> phf(ph, vMax, tvMax, vIn, vCruise, vOut);
 
-    int N = 100;				// number of points to interpolate
+    int N = 100;			// number of points to interpolate
     float E = 0;			// interpolation normalized parametric state [0,1]
 
     // Generate a set of points using PH feed rate along PH curve
