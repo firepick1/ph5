@@ -191,17 +191,17 @@ void test_SamplePHCurve() {
     // for an arc connecting the three points {(-1,1),(0,2),(1,1)}
     PH5Curve<float> ph(ph_arc());
 
-    float vMax = 100;		// maximum velocity (mm/s)
-    float tvMax = 0.01;		// time to achieve maximum velocity (seconds)
-    float vIn = 0;			// initial velocity (mm/s)
-    float vCruise = vMax;	// cruising velocity (mm/s)
-    float vOut = 0;			// final velocity (mm/s)
+    float vMax = 100; // maximum velocity (mm/s)
+    float tvMax = 0.01; // time to achieve maximum velocity (seconds)
+    float vIn = 0; // initial velocity (mm/s)
+    float vCruise = vMax; // cruising velocity (mm/s)
+    float vOut = 0; // final velocity (mm/s)
 
     // Create a quintic feedrate for traversing the above curve smoothly
     PHFeed<float> phf(ph, vMax, tvMax, vIn, vCruise, vOut);
 
-    int N = 100;			// number of points to interpolate
-    float E = 0;			// interpolation normalized parametric state [0,1]
+    int N = 100; // number of points to interpolate
+    float E = 0; // interpolation normalized parametric state [0,1]
 
     // Generate a set of points using PH feed rate along PH curve
     cout << "X,Y" << endl;
