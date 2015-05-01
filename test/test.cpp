@@ -184,6 +184,36 @@ void test_PHFeed() {
 	cout << "TEST	:   test_PH5Feed() OK " << endl;
 }
 
+void test_SamplePHCurve() {
+    cout << "TEST	: test_SamplePHCurve()" << endl;
+
+	// Create a PHCurve interpolator from the PH curve coefficients
+	// for an arc connecting the three points {(-1,1),(0,2),(1,1)}
+	PH5Curve<float> ph(ph_arc());  
+
+	float vMax = 100;		// maximum velocity (mm/s)
+	float tvMax = 0.01;		// time to achieve maximum velocity (seconds)
+	float vIn = 0;			// initial velocity (mm/s)
+	float vCruise = vMax;	// cruising velocity (mm/s)
+	float vOut = 0;			// final velocity (mm/s)
+
+	// Create a quintic feedrate for traversing the above curve smoothly
+	PHFeed<float> phf(ph,vMax, tvMax, vIn, vCruise, vOut);
+
+	int N=100;				// number of points to interpolate
+	float E = 0;			// interpolation normalized parametric state [0,1]
+
+	// Generate a set of points using PH feed rate along PH curve
+	cout << "X,Y" << endl;
+	for (float tPoint=0; tPoint<=N; tPoint++) {
+		E = phf.Ekt(E, tPoint/N);
+		Complex<float> point = ph.r(E);
+		cout << point.Re() << "," << point.Im() << endl;
+	}
+
+	cout << "TEST	:   test_SamplePHCurve() OK " << endl;
+}
+
 int main(int argc, char *argv[]) {
     LOGINFO3("INFO	: ph5 test v%d.%d.%d", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
     firelog_level(FIRELOG_TRACE);
@@ -192,6 +222,7 @@ int main(int argc, char *argv[]) {
 	test_Bernstein();
     test_PH5Curve();
 	test_PHFeed();
+	test_SamplePHCurve();
 
     cout << "TEST	: END OF TEST main()" << endl;
 }
