@@ -18,5 +18,5 @@ zip -r $OUTPUT \
 	ph5/*.cpp \
 	ph5/*.h \
 	ph5/*.hpp \
-	-x!ph5.cpp \
-	-x!ph5/src/CMakeLists.txt
+	-x \
+	ph5/ph5.cpp 
