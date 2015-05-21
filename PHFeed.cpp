@@ -22,7 +22,7 @@ PHFeed<T>::PHFeed(PH5Curve<T> &ph5, T vMax, T tvMax, T vIn, T vCruise, T vOut)
 	ASSERT(0 <= vOut && vOut <= vMax);
 	iterations = 10;
 	epsilon = 0.0000001;
-	T sMax = vMax * tvMax/2.0;
+	T sMax = vMax * tvMax/2.0; // distance required to reach max velocity
 	if (vIn == vCruise && vCruise == vOut) { // constant velocity
 		sAccel = 0;
 		tAccel = 0;
@@ -55,7 +55,7 @@ PHFeed<T>::PHFeed(PH5Curve<T> &ph5, T vMax, T tvMax, T vIn, T vCruise, T vOut)
 	} else {	// accelerate, cruise, decelerate
 		T S2 = S/2.0;
 		ASSERTEQUAL(vIn, vOut);
-		if (sAccel > S2) {
+		if (sMax > S2) {
 			sAccel = S2;
 			T sRatio = S2/sMax;
 			vCruise *= sRatio;
