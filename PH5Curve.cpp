@@ -258,6 +258,5 @@ Complex<T> PH5Curve<T>::pik(int i, int k) {
     }
 }
 
-template class PH5Curve<float>;
-template class PH5Curve<double>;
+template class PH5Curve<PH5TYPE>;
 

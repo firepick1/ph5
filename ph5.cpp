@@ -29,7 +29,7 @@ bool parseArgs(int argc, char *argv[]) {
             // empty argument
         } else if (strcmp("-version", argv[i]) == 0) {
             cout << "{\"version\":\"" << VERSION_MAJOR << "." << VERSION_MINOR << "." << VERSION_PATCH << "\"}" << endl;
-            exit(0);
+            return false;
         } else if (strcmp("-warn", argv[i]) == 0) {
             firelog_level(FIRELOG_WARN);
         } else if (strcmp("-error", argv[i]) == 0) {
@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
     bool argsOk = parseArgs(argc, argv);
     if (!argsOk) {
         help();
-        exit(-1);
+		return -1;
     }
 
 	/*

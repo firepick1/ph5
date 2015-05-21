@@ -8,7 +8,6 @@
 #else
 #define CLASS_DECLSPEC
 #endif
-#include "jansson.h"
 #include <math.h>
 
 using namespace std;
@@ -19,6 +18,10 @@ using namespace std;
 #else
 #define PH5_32_BIT
 #define PH5_PLATFORM_BITS 32
+#endif
+
+#ifndef PH5TYPE 
+#define PH5TYPE float
 #endif
 
 namespace ph5 {

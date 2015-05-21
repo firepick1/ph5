@@ -15,18 +15,10 @@ IF(WIN32)
   IF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
     SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS ON)
   ENDIF()
-  SET(JANSSON_DIR "${CMAKE_SOURCE_DIR}/jansson/msvc" CACHE STRING "Jansson directory") 
-  SET(JANSSON_INCLUDE_DIRS "${JANSSON_DIR}/include")
-  SET(JANSSON_LIB "${JANSSON_DIR}/lib/Debug/jansson_d.lib")
-  SET(JANSSON_DLL "${JANSSON_DIR}/bin/Debug/jansson_d.dll")
-  MESSAGE(STATUS "JANSSON_DLL:${JANSSON_DLL}")
-  MESSAGE(STATUS "JANSSON_LIB:${JANSSON_LIB}")
   SET(PH5_LIB "_ph5.lib")
   SET(PH5_DLL "_ph5.dll")
 ELSE(WIN32)
   MESSAGE(STATUS "Detecting LINUX build")
-  SET(JANSSON_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/jannson/src")
-  SET(JANSSON_LIB "libjansson.so")
   SET(PH5_LIB "lib_ph5.so")
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -g -Wno-format-extra-args")
   SET(CMAKE_SHARED_LINKER_FLAGS_DEBUG "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} -g")
@@ -47,13 +39,13 @@ SET(EXECUTABLE_OUTPUT_PATH "${BUILD_TARGET_DIR}")
 SET(RUNTIME_OUTPUT_NAME ph5)
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-include_directories( ${PROJECT_SOURCE_DIR} ${BUILD_TARGET_DIR} ${JANSSON_INCLUDE_DIRS} )
+include_directories( ${PROJECT_SOURCE_DIR} ${BUILD_TARGET_DIR} )
 include_directories( /usr/local/include )
 include_directories( /usr/include )
 
 include (InstallRequiredSystemLibraries)
 SET(CPACK_RESOURCE_FILE_LICENSE  
-     "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+     "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.md")
 SET(CPACK_PACKAGE_GENERATED_WARNING "GENERATED FILE!!! DO NOT CHANGE!!!")
 SET(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
 SET(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
@@ -67,7 +59,7 @@ endforeach()
 
 configure_file (
   "${PROJECT_SOURCE_DIR}/version.h.in"
-  "${BUILD_TARGET_DIR}/version.h"
+  "${PROJECT_SOURCE_DIR}/version.h"
   )
 
 message("CMAKE_PREFIX_PATH:${CMAKE_PREFIX_PATH}")
@@ -82,23 +74,13 @@ set(PH5_LIB_FILES
   )
 
 add_library(_ph5 SHARED ${PH5_LIB_FILES})
-target_link_libraries(_ph5 ${JANSSON_LIB} )
+target_link_libraries(_ph5 
+)
 set_target_properties(_ph5 PROPERTIES 
     VERSION ${PROJECT_VERSION_STRING} 
     SOVERSION ${PROJECT_VERSION_MAJOR}
     )
 if(WIN32)
-  add_custom_command(TARGET _ph5 PRE_LINK
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different  
-        "${JANSSON_LIB}"      
-        "${PROJECT_SOURCE_DIR}/target/Debug/" 
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different  
-        "${JANSSON_DLL}"      
-        "${PROJECT_SOURCE_DIR}/target/" 
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different  
-        "${JANSSON_DLL}"      
-        "${PROJECT_SOURCE_DIR}/target/Debug/" 
-    )
   add_custom_command(TARGET _ph5 POST_BUILD    
     COMMAND cd ${PROJECT_SOURCE_DIR}/target/Debug
     COMMAND copy ${PH5_DLL} ..
@@ -109,7 +91,7 @@ endif(WIN32)
   
 add_executable(ph5 ph5.cpp)
 add_dependencies(ph5 _ph5)
-target_link_libraries(ph5 ${JANSSON_LIB} ${PH5_LIB} )
+target_link_libraries(ph5 ${PH5_LIB} )
 if(WIN32)
   add_custom_command(TARGET ph5 POST_BUILD    
     COMMAND ${CMAKE_COMMAND} -E copy_if_different  
@@ -122,7 +104,7 @@ add_executable(test
   test/test.cpp)
 
 add_dependencies(test _ph5)
-target_link_libraries(test ${JANSSON_LIB} ${PH5_LIB} )
+target_link_libraries(test ${PH5_LIB} )
 if(WIN32)
   add_custom_command(TARGET test POST_BUILD    
     COMMAND ${CMAKE_COMMAND} -E copy_if_different  

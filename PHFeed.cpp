@@ -133,5 +133,4 @@ T PHFeed<T>::Fk(T vIn, T vOut, int k) {
 	return sum;
 }
 
-template class PHFeed<float>;
-template class PHFeed<double>;
+template class PHFeed<PH5TYPE>;
