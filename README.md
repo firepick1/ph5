@@ -47,7 +47,7 @@ but you can traverse them on more modest hardware.
 1. Unzip and copy the **ph5** folder under the **libraries** folder of your
 Arduino workspace folder
 
-	*Arduino-workspace-folder*`/libraries/ph5`
+	*your-personal-Arduino-workspace-folder*`/libraries/ph5`
 
 1. Restart your Arduino IDE
 
