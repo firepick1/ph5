@@ -5,8 +5,6 @@
 #include <sstream>
 #endif
 #include <math.h>
-#include "FireLog.h"
-#include "FireUtils.hpp"
 #include "version.h"
 #include "ph5.h"
 

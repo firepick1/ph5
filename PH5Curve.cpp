@@ -3,8 +3,6 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "FireLog.h"
-#include "FireUtils.hpp"
 #endif
 #include <math.h>
 #include "version.h"

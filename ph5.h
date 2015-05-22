@@ -14,6 +14,28 @@
 #include <cstdlib>
 #endif
 
+#ifndef ASSERT
+#define ASSERT(x)
+#define ASSERTFAIL(x)
+#define ASSERTEQUALT(a,b,c)
+#define ASSERTEQUAL(a,b)
+#define ASSERTEQUALS(a,b)
+#endif
+
+#ifndef LOGINFO1
+#define firelog_level(x)
+#define LOGERROR1(a,b)
+#define LOGDEBUG1(a,b)
+#define LOGINFO1(a,b)
+#define LOGINFO2(a,b,c)
+#define LOGINFO3(a,b,c,d)
+#endif
+
+#ifdef TEST
+#include "FireLog.h"
+#include "FireUtils.hpp"
+#endif
+
 #include <math.h>
 
 using namespace std;

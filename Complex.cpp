@@ -3,12 +3,6 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "FireLog.h"
-#include "FireUtils.hpp"
-#else
-#define ASSERTEQUALT(a,b,c)
-#define ASSERTEQUAL(a,b)
-#define ASSERTEQUALS(a,b)
 #endif
 #include <math.h>
 #include "version.h"
