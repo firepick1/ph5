@@ -7,6 +7,12 @@
 #else
 #define CLASS_DECLSPEC
 #endif
+#ifdef CMAKE
+#include <stdint.h>
+#include <cstdio>
+#include <string>
+#endif
+
 #include <math.h>
 
 using namespace std;
@@ -22,12 +28,15 @@ using namespace std;
 #ifndef PH5TYPE 
 #define PH5TYPE float
 #endif
-
-namespace ph5 {
-
 #ifndef VECTOR_SIZE
 #define VECTOR_SIZE 10
 #endif
+#ifndef size_t
+#define size_t int16_t
+#endif
+
+namespace ph5 {
+
 template <class T> 
 
 class CLASS_DECLSPEC vector {
@@ -134,8 +143,11 @@ class CLASS_DECLSPEC Complex {
 				return Complex(p,-q);
 			}
 		}
+#ifdef CMAKE
 	public:
 		string stringify(int nPlaces=0);
+#endif
+
 	public:
 		bool assertEqualT(Complex<T> that, double tolerance=0.0000001);
 };

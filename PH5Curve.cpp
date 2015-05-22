@@ -1,10 +1,12 @@
+#ifdef CMAKE
 #include <string.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <math.h>
 #include "FireLog.h"
 #include "FireUtils.hpp"
+#endif
+#include <math.h>
 #include "version.h"
 #include "ph5.h"
 

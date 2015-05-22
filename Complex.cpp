@@ -1,10 +1,16 @@
+#ifdef CMAKEx
 #include <string.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <math.h>
 #include "FireLog.h"
 #include "FireUtils.hpp"
+#else
+#define ASSERTEQUALT(a,b,c)
+#define ASSERTEQUAL(a,b)
+#define ASSERTEQUALS(a,b)
+#endif
+#include <math.h>
 #include "version.h"
 #include "ph5.h"
 
@@ -22,6 +28,7 @@ bool Complex<T>::assertEqualT(Complex<T> that, double tolerance) {
 	ASSERTEQUALT(that.im, im, tolerance);
 }
 
+#ifdef CMAKE
 template<class T>
 string Complex<T>::stringify(int nPlaces) {
 	string s;
@@ -56,6 +63,7 @@ string Complex<T>::stringify(int nPlaces) {
 	}
 	return s;
 }
+#endif
 
 template class Complex<float>;
 template class Complex<double>;

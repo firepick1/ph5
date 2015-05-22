@@ -1,7 +1,9 @@
+#ifdef CMAKE
 #include <string.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#endif
 #include <math.h>
 #include "FireLog.h"
 #include "FireUtils.hpp"
