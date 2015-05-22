@@ -29,6 +29,7 @@ namespace ph5 {
 #define VECTOR_SIZE 10
 #endif
 template <class T> 
+
 class CLASS_DECLSPEC vector {
 	private:
 		T elt[VECTOR_SIZE];
@@ -38,15 +39,15 @@ class CLASS_DECLSPEC vector {
 		vector() : length(0) {
 		}
 		void push_back(const T& val) {
-			ASSERT(length < VECTOR_SIZE);
+			if (length >= VECTOR_SIZE) {
+				throw -911;
+			}
 			elt[length++] = val;
 		}
 		T& operator[](size_t index) {
-			ASSERT(0<=index && index<length);
 			return elt[index];
 		}
 		const T& operator[](size_t index) const {
-			ASSERT(0<=index && index<length);
 			return elt[index];
 		}
 		size_t size() {
