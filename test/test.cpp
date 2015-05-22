@@ -4,7 +4,7 @@
 #include <sstream>
 #include "FireLog.h"
 #include "FireUtils.hpp"
-#include "ph5.hpp"
+#include "ph5.h"
 #include "version.h"
 
 using namespace std;

@@ -6,7 +6,7 @@
 #include "FireLog.h"
 #include "FireUtils.hpp"
 #include "version.h"
-#include "ph5.hpp"
+#include "ph5.h"
 
 using namespace std;
 using namespace ph5;
