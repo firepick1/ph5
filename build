@@ -102,6 +102,11 @@ if [ -e CMakeFiles ] ; then
   mkdir target
 fi
 
+if [ "${MEMORY_MODEL}" == "" ]; then
+	export MEMORY_MODEL=MEMORY_MODEL_TINY
+fi
+echo "DEFINE	: MEMORY_MODEL=${MEMORY_MODEL}"
+
 echo "STATUS	: creating makefile"
 cmake \
   -DCMAKE_INSTALL_PREFIX:PATH=$installPrefix "$@" \

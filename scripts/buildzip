@@ -17,6 +17,6 @@ zip -r $OUTPUT \
 	ph5/README.md \
 	ph5/*.cpp \
 	ph5/*.h \
-	ph5/*.hpp \
 	-x \
+	ph5/FireLog.cpp \
 	ph5/ph5.cpp 
