@@ -1,7 +1,7 @@
 #ifndef PH5_H
 #define PH5_H
 
-#include <vector>
+//#include <vector> // Arduino does not support vector. poopers
 #ifdef _MSC_VER
 #include "winjunk.hpp"
 #else
@@ -24,6 +24,35 @@ using namespace std;
 #endif
 
 namespace ph5 {
+
+#ifndef VECTOR_SIZE
+#define VECTOR_SIZE 10
+#endif
+template <class T> 
+class CLASS_DECLSPEC vector {
+	private:
+		T elt[VECTOR_SIZE];
+		int16_t length;
+
+	public:
+		vector() : length(0) {
+		}
+		void push_back(const T& val) {
+			ASSERT(length < VECTOR_SIZE);
+			elt[length++] = val;
+		}
+		T& operator[](size_t index) {
+			ASSERT(0<=index && index<length);
+			return elt[index];
+		}
+		const T& operator[](size_t index) const {
+			ASSERT(0<=index && index<length);
+			return elt[index];
+		}
+		size_t size() {
+			return length;
+		}
+};
 
 template <class T>
 class CLASS_DECLSPEC Complex {
