@@ -32,9 +32,6 @@ using namespace std;
 #ifndef VECTOR_SIZE
 #define VECTOR_SIZE 10
 #endif
-#ifndef size_t
-#define size_t uint16_t
-#endif
 
 namespace ph5 {
 
