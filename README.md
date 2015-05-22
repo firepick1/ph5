@@ -13,9 +13,9 @@ elsewhere.
 A Pythogarean Hodograph curve is a polynomial approximation to 2D curve. As such,
 it is similar to a Bezier or NURBS curve. What makes a PH curve special is that
 the curve passes through its control points. The on-curve control point greatly
-reduces the human labor of specifying a PH curve. In reality, a PH curve does in
+reduces the human labor of specifying a PH curve (In reality, a PH curve does in
 fact have off-curve control points, but these are secondary and entirely derived
-from the on-curve control points.
+from the on-curve control points.)
 
 PH curves, in particular, quintic PH curves (PH5Curve) are well suited to generating
 smooth curves for CNC robots. Although higher order PH curves (7,9, etc.) are also
@@ -44,8 +44,11 @@ but you can traverse them on more modest hardware.
 
 	`https://github.com/firepick1/ph5/releases`
 
-1. Unzip and copy the **ph5** folder under the **libraries* folder of your
+1. Unzip and copy the **ph5** folder under the **libraries** folder of your
 Arduino workspace folder
+
+1. Restart your Arduino IDE
+
 1. To use the library, include the following line in your sketch:
 
 	`#include <ph5.h>`
