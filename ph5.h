@@ -2,7 +2,6 @@
 #define PH5_H
 
 #include <vector>
-#include <map>
 #ifdef _MSC_VER
 #include "winjunk.hpp"
 #else
