@@ -11,6 +11,7 @@
 #include <stdint.h>
 #include <cstdio>
 #include <string>
+#include <cstdlib>
 #endif
 
 #include <math.h>
