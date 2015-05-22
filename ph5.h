@@ -32,26 +32,27 @@ using namespace std;
 #define VECTOR_SIZE 10
 #endif
 #ifndef size_t
-#define size_t int16_t
+#define size_t uint16_t
 #endif
 
 namespace ph5 {
 
 template <class T> 
 
-class CLASS_DECLSPEC vector {
+class CLASS_DECLSPEC tinyvector {
 	private:
 		T elt[VECTOR_SIZE];
 		int16_t length;
 
 	public:
-		vector() : length(0) {
+		tinyvector() : length(0) {
 		}
-		void push_back(const T& val) {
+		bool push_back(const T& val) {
 			if (length >= VECTOR_SIZE) {
-				throw -911;
+				return false;
 			}
 			elt[length++] = val;
+			return true;
 		}
 		T& operator[](size_t index) {
 			return elt[index];
@@ -162,22 +163,22 @@ inline Complex<T> operator*(T k, Complex<T> c) {
 template<class T>
 class CLASS_DECLSPEC PH5Curve {
 	private:
-		vector<Complex<T> > z;
-		vector<Complex<T> > q;
-		vector<Complex<T> > wi0;
-		vector<Complex<T> > wi1;
-		vector<Complex<T> > wi2;
-		vector<Complex<T> > pi0;
-		vector<Complex<T> > pi1;
-		vector<Complex<T> > pi2;
-		vector<Complex<T> > pi3;
-		vector<Complex<T> > pi4;
-		vector<Complex<T> > pi5;
-		vector<T> sigmai0;
-		vector<T> sigmai1;
-		vector<T> sigmai2;
-		vector<T> sigmai3;
-		vector<T> sigmai4;
+		tinyvector<Complex<T> > z;
+		tinyvector<Complex<T> > q;
+		tinyvector<Complex<T> > wi0;
+		tinyvector<Complex<T> > wi1;
+		tinyvector<Complex<T> > wi2;
+		tinyvector<Complex<T> > pi0;
+		tinyvector<Complex<T> > pi1;
+		tinyvector<Complex<T> > pi2;
+		tinyvector<Complex<T> > pi3;
+		tinyvector<Complex<T> > pi4;
+		tinyvector<Complex<T> > pi5;
+		tinyvector<T> sigmai0;
+		tinyvector<T> sigmai1;
+		tinyvector<T> sigmai2;
+		tinyvector<T> sigmai3;
+		tinyvector<T> sigmai4;
 		int N;
 
 	protected:
@@ -190,7 +191,7 @@ class CLASS_DECLSPEC PH5Curve {
 		Complex<T> ritprime(int i, T p);
 
     public:
-		PH5Curve(vector<Complex<T> > phz, vector<Complex<T> > phq);
+		PH5Curve(tinyvector<Complex<T> > phz, tinyvector<Complex<T> > phq);
 		Complex<T> r(T p);
 		T s(T p);
 		T sigma(T p);
@@ -229,7 +230,7 @@ class CLASS_DECLSPEC PHFeed {
 	public:
 		PHFeed(PH5Curve<T> &ph5, T vMax=200, T tvMax=0.1, T vIn=0, T vCruise=200, T vOut=0);
 	public:
-		T F(T tau);
+		T Ft(T tau);
 	public:
 		T Ekt(T Ekprev, T tau);
 

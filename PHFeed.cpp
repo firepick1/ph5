@@ -85,7 +85,7 @@ PHFeed<T>::PHFeed(PH5Curve<T> &ph5, T vMax, T tvMax, T vIn, T vCruise, T vOut)
 template <class T>
 T PHFeed<T>::Ekt(T Ekprev, T tau) {
 	T Ekr = Ekprev;
-	T Ftau = F(tau);
+	T Ftau = Ft(tau);
 	T dE = 0;
 
 	for (int iteration=0; iteration<iterations; iteration++) {
@@ -103,7 +103,7 @@ T PHFeed<T>::Ekt(T Ekprev, T tau) {
 }
 
 template <class T>
-T PHFeed<T>::F(T tau) {
+T PHFeed<T>::Ft(T tau) {
 	T sum = 0;
 	if (tau < tauCruise) {			// accelerating
 		T t = tau ? (tau*tS)/tAccel : 0;

@@ -88,8 +88,8 @@ void test_Bernstein() {
 }
 
 PH5Curve<float> ph_arc() {
-    vector<Complex<float> > q;
-    vector<Complex<float> > z;
+    tinyvector<Complex<float> > q;
+    tinyvector<Complex<float> > z;
     q.push_back(Complex<float>(-1, 1));
     q.push_back(Complex<float>(0, 2));
     q.push_back(Complex<float>(1, 1));

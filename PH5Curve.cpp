@@ -19,7 +19,7 @@ int choose6[7] = { 1, 6, 15, 20, 15, 6, 1 };
 }
 
 template<class T>
-PH5Curve<T>::PH5Curve(vector<Complex<T> > phz, vector<Complex<T> > phq) {
+PH5Curve<T>::PH5Curve(tinyvector<Complex<T> > phz, tinyvector<Complex<T> > phq) {
 	ASSERTEQUAL(phz.size(), phq.size());
 	ASSERT(phz.size() > 2);
 	phz[0].assertEqualT(Complex<T>());
