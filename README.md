@@ -40,7 +40,7 @@ Generally speaking, you want to generate PH curves on a fast, desktop/laptop,
 but you can traverse them on more modest hardware.
 
 ### Installation: ArduinoMega2560
-1. Download and install the library:
+1. Download and install the [library](https://github.com/firepick1/ph5/releases):
 
 	`https://github.com/firepick1/ph5/releases`
 
