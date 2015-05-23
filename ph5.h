@@ -13,6 +13,11 @@
 #include <string>
 #endif
 
+#ifdef ARDUINO
+#include "Arduino.h"
+#define MEMORY_MODEL_TINY
+#endif
+
 #ifdef MEMORY_MODEL_TINY
 // MEMORY_MODEL_TINY: We have no room for niceties
 #define PHVECTOR tinyvector
