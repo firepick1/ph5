@@ -73,7 +73,7 @@ PHFeed<T>::PHFeed(PH5Curve<T> &ph5, T vMax, T tvMax, T vIn, T vCruise, T vOut)
 	tauCruise = tAccel/tS;
 	tauDecel = 1 - tDecel/tS;
 
-	for (int i=0; i<=6; i++) {
+	for (int16_t i=0; i<=6; i++) {
 		Faccel[i] = Fk(vIn, vCruise, i);
 		Fcruise[i] = Fk(vCruise, vCruise, i);
 		Fdecel[i] = Fk(vCruise, vOut, i);
@@ -86,7 +86,7 @@ T PHFeed<T>::Ekt(T Ekprev, T tau) {
 	T Ftau = Ft(tau);
 	T dE = 0;
 
-	for (int iteration=0; iteration<iterations; iteration++) {
+	for (int16_t iteration=0; iteration<iterations; iteration++) {
 		dE = (Ftau - ph.s(Ekr))/ph.sigma(Ekr);
 		Ekr = Ekr + dE;
 		//cout << "tau:" << tau << " Ftau:" << Ftau << " Ekr:" << Ekr << " dE:" << dE << endl;
@@ -105,19 +105,19 @@ T PHFeed<T>::Ft(T tau) {
 	T sum = 0;
 	if (tau < tauCruise) {			// accelerating
 		T t = tau ? (tau*tS)/tAccel : 0;
-		for (int k=0; k<=6; k++) {
+		for (int16_t k=0; k<=6; k++) {
 			sum += Faccel[k] * Bernstein6(k, t);
 		}
 		return sum*tAccel/6.0;
 	} else if (tau < tauDecel) {	// cruising
 		T t = (tau*tS-tAccel)/tCruise;
-		for (int k=0; k<=6; k++) {
+		for (int16_t k=0; k<=6; k++) {
 			sum += Fcruise[k] * Bernstein6(k, t);
 		}
 		return sum*tCruise/6.0 + sAccel;
 	} else {						// decelerating
 		T t = tau==1 ? 1 : (tau*tS-tAccel-tCruise)/tDecel;
-		for (int k=0; k<=6; k++) {
+		for (int16_t k=0; k<=6; k++) {
 			sum += Fdecel[k] * Bernstein6(k, t);
 		}
 		return sum*tDecel/6.0 + sAccel + sCruise;
@@ -125,9 +125,9 @@ T PHFeed<T>::Ft(T tau) {
 }
 
 template <class T>
-T PHFeed<T>::Fk(T vIn, T vOut, int k) {
+T PHFeed<T>::Fk(T vIn, T vOut, int16_t k) {
 	T sum = 0;
-	for (int j=0; j<k; j++) {
+	for (int16_t j=0; j<k; j++) {
 		sum += j<3 ? vIn : vOut;
 	}
 	return sum;

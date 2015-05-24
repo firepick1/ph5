@@ -24,7 +24,7 @@ bool Complex<T>::assertEqualT(Complex<T> that, double tolerance) {
 
 #ifdef CMAKE
 template<class T>
-string Complex<T>::stringify(int nPlaces) {
+string Complex<T>::stringify(int16_t nPlaces) {
 	string s;
 	char fmt[100];
 	snprintf(fmt, sizeof(fmt), "%%.%dlf", nPlaces);

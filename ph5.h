@@ -177,7 +177,7 @@ class CLASS_DECLSPEC Complex {
         }
 #ifdef CMAKE
     public:
-        string stringify(int nPlaces = 0);
+        string stringify(int16_t nPlaces = 0);
 #endif
 
     public:
@@ -210,16 +210,16 @@ class CLASS_DECLSPEC PH5Curve {
         PHVECTOR<T> sigmai2;
         PHVECTOR<T> sigmai3;
         PHVECTOR<T> sigmai4;
-        int N;
+        int16_t N;
 
     protected:
-        Complex<T> calc_wij(int i, int j);
-        Complex<T> pik(int i, int k);
-        Complex<T> rit(int i, T p);
-        T sit(int i, T p);
-        T sik(int i, int j);
-        T sigmaij(int i, int j);
-        Complex<T> ritprime(int i, T p);
+        Complex<T> calc_wij(int16_t i, int16_t j);
+        Complex<T> pik(int16_t i, int16_t k);
+        Complex<T> rit(int16_t i, T p);
+        T sit(int16_t i, T p);
+        T sik(int16_t i, int16_t j);
+        T sigmaij(int16_t i, int16_t j);
+        Complex<T> ritprime(int16_t i, T p);
 
     public:
         PH5Curve(PHVECTOR<Complex<T> > phz, PHVECTOR<Complex<T> > phq);
@@ -247,20 +247,20 @@ class CLASS_DECLSPEC PHFeed {
         T tDecel;			// deceleration time
         T tS;				// total traversal time
         T epsilon;			// Newton-Raphson convergence limit
-        int iterations;		// maximum Newton-Raphson iterations
+        int16_t iterations;		// maximum Newton-Raphson iterations
         T tauCruise;
         T tauDecel;
         T Faccel[7];
         T Fcruise[7];
         T Fdecel[7];
-        inline T Vaccel(int k) {
+        inline T Vaccel(int16_t k) {
             return k < 3 ? vIn : vCruise;
         };
-        inline T Vdecel(int k) {
+        inline T Vdecel(int16_t k) {
             return k < 3 ? vCruise : vOut;
         };
-        T Fk(T vIn, T vOut, int k);
-        inline T Vk(T vIn, T vOut, int k) {
+        T Fk(T vIn, T vOut, int16_t k);
+        inline T Vk(T vIn, T vOut, int16_t k) {
             return k < 3 ? vIn : vOut;
         }
 
@@ -323,30 +323,30 @@ class CLASS_DECLSPEC PHFeed {
 
 };
 
-extern int choose5[6];
-extern int choose6[7];
+extern int16_t choose5[6];
+extern int16_t choose6[7];
 
 template <class T>
-T Bernstein5(int k, T p) {
+T Bernstein5(int16_t k, T p) {
     T result = choose5[k];
     T p1 = 1 - p;
-    for (int i = 0; i < 5 - k; i++) {
+    for (int16_t i = 0; i < 5 - k; i++) {
         result *= p1;
     }
-    for (int i = 0; i < k; i++) {
+    for (int16_t i = 0; i < k; i++) {
         result *= p;
     }
     return result;
 }
 
 template <class T>
-T Bernstein6(int k, T p) {
+T Bernstein6(int16_t k, T p) {
     T result = choose6[k];
     T p1 = 1 - p;
-    for (int i = 0; i < 6 - k; i++) {
+    for (int16_t i = 0; i < 6 - k; i++) {
         result *= p1;
     }
-    for (int i = 0; i < k; i++) {
+    for (int16_t i = 0; i < k; i++) {
         result *= p;
     }
     return result;

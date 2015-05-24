@@ -22,7 +22,7 @@ bool parseArgs(int argc, char *argv[]) {
         return false;
     }
 
-    for (int i = 1; i < argc; i++) {
+    for (int16_t i = 1; i < argc; i++) {
         if (argv[i][0] == 0) {
             // empty argument
         } else if (strcmp("-version", argv[i]) == 0) {

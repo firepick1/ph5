@@ -12,8 +12,8 @@ using namespace std;
 using namespace ph5;
 
 namespace ph5 {
-int choose5[6] = { 1, 5, 10, 10, 5, 1 };
-int choose6[7] = { 1, 6, 15, 20, 15, 6, 1 };
+int16_t choose5[6] = { 1, 5, 10, 10, 5, 1 };
+int16_t choose6[7] = { 1, 6, 15, 20, 15, 6, 1 };
 }
 
 template<class T>
@@ -29,7 +29,7 @@ PH5Curve<T>::PH5Curve(PHVECTOR<Complex<T> > phz, PHVECTOR<Complex<T> > phq) {
 	wi0.push_back(Complex<T>());
 	wi1.push_back(Complex<T>());
 	wi2.push_back(Complex<T>());
-	for (int i=1; i<=N; i++) {
+	for (int16_t i=1; i<=N; i++) {
 		wi0.push_back(calc_wij(i,0));
 		wi1.push_back(calc_wij(i,1));
 		wi2.push_back(calc_wij(i,2));
@@ -40,7 +40,7 @@ PH5Curve<T>::PH5Curve(PHVECTOR<Complex<T> > phz, PHVECTOR<Complex<T> > phq) {
 	pi3.push_back(Complex<T>());
 	pi4.push_back(Complex<T>());
 	pi5.push_back(Complex<T>());
-	for (int i=1; i<=N; i++) {
+	for (int16_t i=1; i<=N; i++) {
 		pi0.push_back(pik(i,0));
 		pi1.push_back(pik(i,1));
 		pi2.push_back(pik(i,2));
@@ -53,7 +53,7 @@ PH5Curve<T>::PH5Curve(PHVECTOR<Complex<T> > phz, PHVECTOR<Complex<T> > phq) {
 	sigmai2.push_back(0);
 	sigmai3.push_back(0);
 	sigmai4.push_back(0);
-	for (int i=1; i<=N; i++) {
+	for (int16_t i=1; i<=N; i++) {
 		sigmai0.push_back(sigmaij(i,0));
 		sigmai1.push_back(sigmaij(i,1));
 		sigmai2.push_back(sigmaij(i,2));
@@ -72,12 +72,12 @@ Complex<T> PH5Curve<T>::rprime(T p) {
 	ASSERT(0 <= p);
 	ASSERT(p <= 1);
 	T PN = p * N;
-	int iPN = p == 1 ? N : (((int) PN)+1);
+	int16_t iPN = p == 1 ? N : (((int16_t) PN)+1);
 	return ritprime(iPN, PN-iPN+1)*N;
 }
 
 template<class T>
-Complex<T> PH5Curve<T>::ritprime(int i, T p) {
+Complex<T> PH5Curve<T>::ritprime(int16_t i, T p) {
 	Complex<T> sum;
 	T p1 = 1 - p;
 	if (i == 1) {
@@ -101,9 +101,9 @@ T PH5Curve<T>::s(T p) {
 	ASSERT(0 <= p);
 	ASSERT(p <= 1);
 	T PN = p * N;
-	int iPN = p == 1 ? N : (((int) PN) + 1);
+	int16_t iPN = p == 1 ? N : (((int16_t) PN) + 1);
 	T sum = 0;
-	for (int iSeg=1; iSeg<iPN; iSeg++) {
+	for (int16_t iSeg=1; iSeg<iPN; iSeg++) {
 		sum += sit(iSeg, 1);
 	}
 	sum += sit(iPN, PN-iPN+1);
@@ -111,17 +111,17 @@ T PH5Curve<T>::s(T p) {
 }
 
 template<class T>
-T PH5Curve<T>::sit(int i, T p) {
+T PH5Curve<T>::sit(int16_t i, T p) {
 	T sum = 0;
-	for (int k=0; k<=5; k++) {
+	for (int16_t k=0; k<=5; k++) {
 		sum += sik(i,k) * Bernstein5(k, p);
 	}
 }
 
 template<class T>
-T PH5Curve<T>::sik(int i, int k) {
+T PH5Curve<T>::sik(int16_t i, int16_t k) {
     T sum = 0;
-    for (int j=0; j<=k-1; j++) {
+    for (int16_t j=0; j<=k-1; j++) {
         switch (j) {
         case 0:
             sum += sigmai0[i];
@@ -147,7 +147,7 @@ T PH5Curve<T>::sik(int i, int k) {
 }
 
 template<class T>
-T PH5Curve<T>::sigmaij(int i, int j) {
+T PH5Curve<T>::sigmaij(int16_t i, int16_t j) {
     T u0 = wi0[i].Re();
     T v0 = wi0[i].Im();
     T u1 = wi1[i].Re();
@@ -173,12 +173,12 @@ T PH5Curve<T>::sigmaij(int i, int j) {
 template<class T>
 Complex<T> PH5Curve<T>::r(T p) {
     T PN = p * N;
-    int i = p < 1 ? ((int)PN) + 1 : PN;
+    int16_t i = p < 1 ? ((int16_t)PN) + 1 : PN;
     return rit(i, PN - i + 1);
 }
 
 template<class T>
-Complex<T> PH5Curve<T>::rit(int i, T e) {
+Complex<T> PH5Curve<T>::rit(int16_t i, T e) {
     Complex<T> sum;
     T e1 = 1 - e;
     T ek[6];
@@ -186,7 +186,7 @@ Complex<T> PH5Curve<T>::rit(int i, T e) {
     ek[0] = e1k[5] = 1;
     T Eprod = 1;
     T E1prod = 1;
-    for (int k = 1; k <= 5; k++) {
+    for (int16_t k = 1; k <= 5; k++) {
         ek[k] = Eprod = e * Eprod;
         e1k[5 - k] = E1prod = e1 * E1prod;
     }
@@ -200,7 +200,7 @@ Complex<T> PH5Curve<T>::rit(int i, T e) {
 }
 
 template<class T>
-Complex<T> PH5Curve<T>::calc_wij(int i, int j) {
+Complex<T> PH5Curve<T>::calc_wij(int16_t i, int16_t j) {
     if (i == 1) {
         switch (j) {
         case 0:
@@ -237,7 +237,7 @@ Complex<T> PH5Curve<T>::calc_wij(int i, int j) {
     }
 }
 template<class T>
-Complex<T> PH5Curve<T>::pik(int i, int k) {
+Complex<T> PH5Curve<T>::pik(int16_t i, int16_t k) {
     ASSERT(i > 0);
     ASSERT(i <= N);
     switch (k) {

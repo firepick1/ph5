@@ -105,8 +105,8 @@ void test_PH5Curve() {
 
     long msStart = millis();
     PH5TYPE epsilon = 0.00001;
-    int ITER = 10000;
-    for (int i = 0; i < ITER; i++) {
+    int16_t ITER = 10000;
+    for (int16_t i = 0; i < ITER; i++) {
         Complex<PH5TYPE> c;
         c = ph.r(0);
         c.assertEqualT(Complex<PH5TYPE>(-1, 1), epsilon);
@@ -200,7 +200,7 @@ void test_SamplePHCurve() {
     // Create a quintic feedrate for traversing the above curve smoothly
     PHFeed<PH5TYPE> phf(ph, vMax, tvMax, vIn, vCruise, vOut);
 
-    int N = 100; // number of points to interpolate
+    int16_t N = 100; // number of points to interpolate
     PH5TYPE E = 0; // interpolation normalized parametric state [0,1]
 
     // Generate a set of points using PH feed rate along PH curve
