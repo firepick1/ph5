@@ -117,6 +117,7 @@ T PH5Curve<T>::sit(int16_t i, T p) {
 	for (int16_t k=0; k<=5; k++) {
 		sum += sik(i,k) * Bernstein5(k, p);
 	}
+	return sum;
 }
 
 template<class T>
@@ -169,6 +170,7 @@ T PH5Curve<T>::sigmaij(int16_t i, int16_t j) {
     default:
         ASSERTFAIL("sigmai?");
     }
+	return 0;
 }
 
 template<class T>
@@ -236,7 +238,9 @@ Complex<T> PH5Curve<T>::calc_wij(int16_t i, int16_t j) {
     default:
         ASSERTFAIL("calc_wij j");
     }
+	return 0;
 }
+
 template<class T>
 Complex<T> PH5Curve<T>::pik(int16_t i, int16_t k) {
     ASSERT(i > 0);
@@ -257,6 +261,7 @@ Complex<T> PH5Curve<T>::pik(int16_t i, int16_t k) {
     default:
         ASSERTFAIL("invalid k");
     }
+	return 0;
 }
 
 template class PH5Curve<PH5TYPE>;
