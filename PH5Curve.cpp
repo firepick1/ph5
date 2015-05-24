@@ -14,6 +14,7 @@ using namespace ph5;
 namespace ph5 {
 int16_t choose5[6] = { 1, 5, 10, 10, 5, 1 };
 int16_t choose6[7] = { 1, 6, 15, 20, 15, 6, 1 };
+PH5TYPE OUTOFRANGE = 911.911;
 }
 
 template<class T>

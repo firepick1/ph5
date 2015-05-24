@@ -62,6 +62,8 @@ using namespace std;
 namespace ph5 {
 
 #ifdef MEMORY_MODEL_TINY
+extern PH5TYPE OUTOFRANGE;
+
 template <class T>
 class CLASS_DECLSPEC tinyvector {
     private:
@@ -71,20 +73,26 @@ class CLASS_DECLSPEC tinyvector {
     public:
         tinyvector() : length(0) {
         }
-        bool push_back(const T& val) {
+        inline bool push_back(const T& val) {
             if (length >= VECTOR_SIZE) {
+#ifdef CMAKE
+				throw "HELP";
+#endif
                 return false;
             }
             elt[length++] = val;
             return true;
         }
-        T& operator[](size_t index) {
+        inline T& operator[](int16_t index) {
+            return elt[index];
+        } 
+		inline const T& operator[](int16_t index) const {
+			if (index < 0 || VECTOR_SIZE <= index) {
+				return OUTOFRANGE;
+			}
             return elt[index];
         }
-        const T& operator[](size_t index) const {
-            return elt[index];
-        }
-        size_t size() {
+        inline size_t size() {
             return length;
         }
 };
