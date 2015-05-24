@@ -59,5 +59,4 @@ string Complex<T>::stringify(int16_t nPlaces) {
 }
 #endif
 
-template class Complex<float>;
-template class Complex<double>;
+template class Complex<PH5TYPE>;
