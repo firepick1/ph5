@@ -237,6 +237,16 @@ class CLASS_DECLSPEC PH5Curve {
         Complex<T> rprime(T p);
 };
 
+enum FeedUseCase {
+	FEEDUSE_A,	// vIn==vCruise==vOut > 0
+	FEEDUSE_B1,	// vOut==vCruise sAccel<sMax
+	FEEDUSE_B1,	// vOut==vCruise sAccel:sMax
+	FEEDUSE_C1,	// vIn==vCruise sAccel<sMax
+	FEEDUSE_C1,	// vIn==vCruise sAccel:sMax
+	FEEDUSE_D1, // vIn:0, vOut:0, vCruise<vMax, tCruise:0
+	FEEDUSE_D2, // vIn:0, vOut:0, vCruise:vMax, tCruise>=0
+}
+
 template<class T>
 class CLASS_DECLSPEC PHFeed {
     protected:
@@ -255,12 +265,13 @@ class CLASS_DECLSPEC PHFeed {
         T tDecel;			// deceleration time
         T tS;				// total traversal time
         T epsilon;			// Newton-Raphson convergence limit
-        int16_t iterations;		// maximum Newton-Raphson iterations
+        int16_t iterations;	// maximum Newton-Raphson iterations
         T tauCruise;
         T tauDecel;
         T Faccel[7];
         T Fcruise[7];
         T Fdecel[7];
+		int8_t uc;			// FeedUseCase
         inline T Vaccel(int16_t k) {
             return k < 3 ? vIn : vCruise;
         };
@@ -273,59 +284,68 @@ class CLASS_DECLSPEC PHFeed {
         }
 
     public:
-        PHFeed(PH5Curve<T> &ph5, T vMax = 200, T tvMax = 0.1, T vIn = 0, T vCruise = 200, T vOut = 0);
+        PHFeed(PH5Curve<T> &ph5, 
+			T vMax = 200,	// maximum velocity 
+			T tvMax = 0.1,	// time to reach maximum velocity 
+			T vIn = 0,		// entry velocity 
+			T vOut = 0,		// exit velocity
+			T vCruise = 0 	// target cruise velocity (default is vMax)
+			);
     public:
         T Ft(T tau);
     public:
         T Ekt(T Ekprev, T tau);
 
     public:
-        inline T sigma(T E) {
+		FeedUseCase getFeedUseCase() {
+			return (FeedUseCase) uc;
+		}
+        inline T sigma(T E) { // parametric arc length velocity
             return ph.sigma(E);
         }
-        inline T s(T E) {
+        inline T s(T E) { // parametric distance
             return ph.s(E);
         }
-        inline Complex<T> r(T E) {
+        inline Complex<T> r(T E) { 
             return ph.r(E);
         }
-        inline T get_tS() {
+        inline T get_tS() { // total traversal time
             return tS;
         };
-        inline T get_tAccel() {
+        inline T get_tAccel() { // acceleration time
             return tAccel;
         };
-        inline T get_tCruise() {
+        inline T get_tCruise() { // cruising time
             return tCruise;
         };
-        inline T get_tDecel() {
+        inline T get_tDecel() { // deceleration time
             return tDecel;
         };
-        inline T get_sAccel() {
+        inline T get_sAccel() { // acceleration distance
             return sAccel;
         };
-        inline T get_sCruise() {
+        inline T get_sCruise() { // cruising distance
             return sCruise;
         };
-        inline T get_sDecel() {
+        inline T get_sDecel() { // deceleration distance
             return sDecel;
         };
-        inline T get_S() {
+        inline T get_S() { // total path length
             return S;
         };
-        inline T get_vIn() {
+        inline T get_vIn() { // entry velocity
             return vIn;
         };
-        inline T get_vCruise() {
+        inline T get_vCruise() { // cruise velocity
             return vCruise;
         };
-        inline T get_vOut() {
+        inline T get_vOut() { // exit velocity
             return vOut;
         };
-        inline T get_vMax() {
+        inline T get_vMax() { // maximum allowed velocity
             return vMax;
         };
-        inline T get_tvMax() {
+        inline T get_tvMax() { // time to reach maximum allows velocity
             return tvMax;
         };
 

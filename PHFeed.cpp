@@ -12,29 +12,35 @@ using namespace std;
 using namespace ph5;
 
 template<class T>
-PHFeed<T>::PHFeed(PH5Curve<T> &ph5, T vMax, T tvMax, T vIn, T vCruise, T vOut) 
+PHFeed<T>::PHFeed(PH5Curve<T> &ph5, T vMax, T tvMax, T vIn, T vOut, T vCruise) 
 	:ph(ph5), vMax(vMax), tvMax(tvMax), vIn(vIn), vCruise(vCruise), vOut(vOut) {
 	S = ph.s(1);
 	ASSERT(vMax > 0);
 	ASSERT(tvMax > 0);
 	ASSERT(0 <= vIn && vIn <= vMax);
+	if (vCruise == 0) {
+		vCruise = vMax;
+	}
 	ASSERT(0 <= vCruise && vCruise <= vMax);
 	ASSERT(0 <= vOut && vOut <= vMax);
 	iterations = 10;
 	epsilon = 0.0000001;
 	T sMax = vMax * tvMax/2.0; // distance required to reach max velocity
 	if (vIn == vCruise && vCruise == vOut) { // constant velocity
+		uc = FEEDUSE_A;
 		sAccel = 0;
 		tAccel = 0;
 		sDecel = 0;
 		tDecel = 0;
 	} else if (vIn != vCruise && vCruise == vOut) {	// acceleration only
 		if (sMax > S) {
-			T sRatio = S/sMax;
+			uc = FEEDUSE_B1;
+			T sRatio = sqrt(S/sMax);
 			sAccel = S;
 			tAccel = tvMax * sRatio;
 			vCruise = vCruise * sRatio;
 		} else {
+			uc = FEEDUSE_B2;
 			sAccel = sMax;
 			tAccel = tvMax;
 		}
@@ -42,11 +48,13 @@ PHFeed<T>::PHFeed(PH5Curve<T> &ph5, T vMax, T tvMax, T vIn, T vCruise, T vOut)
 		tDecel = 0;
 	} else if (vIn == vCruise && vCruise != vOut) {	// deceleration only
 		if (sMax > S) {
-			T sRatio = S/sMax;
+			uc = FEEDUSE_C1;
+			T sRatio = sqrt(S/sMax);
 			vCruise = vCruise * sRatio;
 			sDecel = S;
 			tDecel = tvMax * sRatio;
 		} else {
+			uc = FEEDUSE_C2;
 			sDecel = sMax;
 			tDecel = tvMax;
 		}
@@ -56,11 +64,13 @@ PHFeed<T>::PHFeed(PH5Curve<T> &ph5, T vMax, T tvMax, T vIn, T vCruise, T vOut)
 		T S2 = S/2.0;
 		ASSERTEQUAL(vIn, vOut);
 		if (sMax > S2) {
+			uc = FEEDUSE_D1;
 			sAccel = S2;
-			T sRatio = S2/sMax;
+			T sRatio = sqrt(S2/sMax);
 			vCruise *= sRatio;
 			tAccel = tvMax * sRatio;
 		} else {
+			uc = FEEDUSE_D2;
 			sAccel = sMax;
 			tAccel = tvMax;
 		}

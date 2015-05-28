@@ -145,7 +145,7 @@ void test_PH5Curve() {
 void test_PHFeed() {
     cout << "TEST	: test_PH5Feed()" << endl;
     PH5Curve<PH5TYPE> ph(ph_arc());
-    PHFeed<PH5TYPE> phf(ph, 100, 0.01, 0, 100, 0);
+    PHFeed<PH5TYPE> phf(ph, 100, 0.01);
     PH5TYPE E = 0;
     PH5TYPE epsilon = 0.001;
     ASSERTEQUALT(0, ph.s(E), epsilon);
@@ -198,7 +198,7 @@ void test_SamplePHCurve() {
     PH5TYPE vOut = 0; // final velocity (mm/s)
 
     // Create a quintic feedrate for traversing the above curve smoothly
-    PHFeed<PH5TYPE> phf(ph, vMax, tvMax, vIn, vCruise, vOut);
+    PHFeed<PH5TYPE> phf(ph, vMax, tvMax, vIn, vOut, vCruise);
 
     int16_t N = 100; // number of points to interpolate
     PH5TYPE E = 0; // interpolation normalized parametric state [0,1]
