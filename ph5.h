@@ -240,12 +240,12 @@ class CLASS_DECLSPEC PH5Curve {
 enum FeedUseCase {
 	FEEDUSE_A,	// vIn==vCruise==vOut > 0
 	FEEDUSE_B1,	// vOut==vCruise sAccel<sMax
-	FEEDUSE_B1,	// vOut==vCruise sAccel:sMax
+	FEEDUSE_B2,	// vOut==vCruise sAccel:sMax
 	FEEDUSE_C1,	// vIn==vCruise sAccel<sMax
-	FEEDUSE_C1,	// vIn==vCruise sAccel:sMax
+	FEEDUSE_C2,	// vIn==vCruise sAccel:sMax
 	FEEDUSE_D1, // vIn:0, vOut:0, vCruise<vMax, tCruise:0
 	FEEDUSE_D2, // vIn:0, vOut:0, vCruise:vMax, tCruise>=0
-}
+};
 
 template<class T>
 class CLASS_DECLSPEC PHFeed {
