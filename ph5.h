@@ -76,7 +76,7 @@ class CLASS_DECLSPEC tinyvector {
         inline bool push_back(const T& val) {
             if (length >= VECTOR_SIZE) {
 #ifdef CMAKE
-				throw "HELP";
+                throw "HELP";
 #endif
                 return false;
             }
@@ -85,11 +85,11 @@ class CLASS_DECLSPEC tinyvector {
         }
         inline T& operator[](int16_t index) {
             return elt[index];
-        } 
-		inline const T& operator[](int16_t index) const {
-			if (index < 0 || VECTOR_SIZE <= index) {
-				return OUTOFRANGE;
-			}
+        }
+        inline const T& operator[](int16_t index) const {
+            if (index < 0 || VECTOR_SIZE <= index) {
+                return OUTOFRANGE;
+            }
             return elt[index];
         }
         inline size_t size() {
@@ -115,7 +115,7 @@ class CLASS_DECLSPEC Complex {
             return this->im;
         }
     public:
-        T modulus() {
+        inline T modulus() {
             return ::sqrt(re * re + im * im);
         }
     public:
@@ -192,6 +192,35 @@ class CLASS_DECLSPEC Complex {
         bool assertEqualT(Complex<T> that, double tolerance = 0.0000001);
 };
 
+extern int16_t choose5[6];
+extern int16_t choose6[7];
+
+template <class T>
+inline T Bernstein5(int16_t k, T p) {
+    T result = choose5[k];
+    T p1 = 1 - p;
+    for (int16_t i = 0; i < 5 - k; i++) {
+        result *= p1;
+    }
+    for (int16_t i = 0; i < k; i++) {
+        result *= p;
+    }
+    return result;
+}
+
+template <class T>
+inline T Bernstein6(int16_t k, T p) {
+    T result = choose6[k];
+    T p1 = 1 - p;
+    for (int16_t i = 0; i < 6 - k; i++) {
+        result *= p1;
+    }
+    for (int16_t i = 0; i < k; i++) {
+        result *= p;
+    }
+    return result;
+}
+
 namespace ph5 {
 template<class T>
 inline Complex<T> operator*(T k, Complex<T> c) {
@@ -219,32 +248,91 @@ class CLASS_DECLSPEC PH5Curve {
         PHVECTOR<T> sigmai3;
         PHVECTOR<T> sigmai4;
         int16_t N;
+        Complex<T> z1t3mz2;
+        Complex<T> z1pz2;
+        Complex<T> z1t4;
+        Complex<T> zNpzNm1;
+        Complex<T> zNt4;
+        Complex<T> zNt3mzNm1;
+		T S;
 
     protected:
         Complex<T> calc_wij(int16_t i, int16_t j);
         Complex<T> pik(int16_t i, int16_t k);
         Complex<T> rit(int16_t i, T p);
-        T sit(int16_t i, T p);
-        T sik(int16_t i, int16_t j);
+        inline T sit(int16_t i, T p) {
+            T sum = 0;
+            for (int16_t k = 0; k <= 5; k++) {
+                sum += sik(i, k) * Bernstein5(k, p);
+            }
+            return sum;
+        }
+        inline T sik(int16_t i, int16_t k) {
+            T sum = 0;
+            for (int16_t j = 0; j <= k - 1; j++) {
+                switch (j) {
+                case 0:
+                    sum += sigmai0[i];
+                    break;
+                case 1:
+                    sum += sigmai1[i];
+                    break;
+                case 2:
+                    sum += sigmai2[i];
+                    break;
+                case 3:
+                    sum += sigmai3[i];
+                    break;
+                case 4:
+                    sum += sigmai4[i];
+                    break;
+                default:
+                    ASSERTFAIL("si?");
+                    break;
+                }
+            }
+            return sum / 5;
+        }
+
         T sigmaij(int16_t i, int16_t j);
-        Complex<T> ritprime(int16_t i, T p);
+        inline Complex<T> ritprime(int16_t i, T p) {
+            Complex<T> sum;
+            T p1 = 1 - p;
+            if (i == 1) {
+                sum.add(z1t3mz2 * p1 * p1);
+                sum.add(z1t4 * p1 * p);
+                sum.add(z1pz2 * p * p);
+            } else if (i == N) {
+                sum.add(zNpzNm1 * p1 * p1);
+                sum.add(zNt4 * p1 * p);
+                sum.add(zNt3mzNm1 * p * p);
+            } else {
+                sum.add((z[i - 1] + z[i])*p1 * p1);
+                sum.add(z[i] * 4 * p1 * p);
+                sum.add((z[i] + z[i + 1])*p * p);
+            }
+            return (sum * sum) / 4.0;
+        }
 
     public:
         PH5Curve(PHVECTOR<Complex<T> > phz, PHVECTOR<Complex<T> > phq);
         Complex<T> r(T p);
         T s(T p);
-        T sigma(T p);
+        inline T sigma(T p) {
+            return rprime(p).modulus();
+        }
+
         Complex<T> rprime(T p);
 };
 
 enum FeedUseCase {
-	FEEDUSE_A,	// vIn==vCruise==vOut > 0
-	FEEDUSE_B1,	// vOut==vCruise sAccel<sMax
-	FEEDUSE_B2,	// vOut==vCruise sAccel:sMax
-	FEEDUSE_C1,	// vIn==vCruise sAccel<sMax
-	FEEDUSE_C2,	// vIn==vCruise sAccel:sMax
-	FEEDUSE_D1, // vIn:0, vOut:0, vCruise<vMax, tCruise:0
-	FEEDUSE_D2, // vIn:0, vOut:0, vCruise:vMax, tCruise>=0
+    FEEDUSE_A,	// vIn==vCruise==vOut > 0
+    FEEDUSE_B1,	// vOut==vCruise sAccel<sMax
+    FEEDUSE_B2,	// vOut==vCruise sAccel:sMax
+    FEEDUSE_C1,	// vIn==vCruise sAccel<sMax
+    FEEDUSE_C2,	// vIn==vCruise sAccel:sMax
+    FEEDUSE_D1, // vIn:0, vOut:0, vCruise<vMax, tCruise:0
+    FEEDUSE_D2, // vIn:0, vOut:0, vCruise:vMax, tCruise>=0
 };
 
 template<class T>
@@ -271,7 +359,7 @@ class CLASS_DECLSPEC PHFeed {
         T Faccel[7];
         T Fcruise[7];
         T Fdecel[7];
-		int8_t uc;			// FeedUseCase
+        int8_t uc;			// FeedUseCase
         inline T Vaccel(int16_t k) {
             return k < 3 ? vIn : vCruise;
         };
@@ -284,29 +372,29 @@ class CLASS_DECLSPEC PHFeed {
         }
 
     public:
-        PHFeed(PH5Curve<T> &ph5, 
-			T vMax = 200,	// maximum velocity 
-			T tvMax = 0.1,	// time to reach maximum velocity 
-			T vIn = 0,		// entry velocity 
-			T vOut = 0,		// exit velocity
-			T vCruise = 0 	// target cruise velocity (default is vMax)
-			);
+        PHFeed(PH5Curve<T> &ph5,
+               T vMax = 200,	// maximum velocity
+               T tvMax = 0.1,	// time to reach maximum velocity
+               T vIn = 0,		// entry velocity
+               T vOut = 0,		// exit velocity
+               T vCruise = 0 	// target cruise velocity (default is vMax)
+              );
     public:
         T Ft(T tau);
     public:
         T Ekt(T Ekprev, T tau);
 
     public:
-		FeedUseCase getFeedUseCase() {
-			return (FeedUseCase) uc;
-		}
+        FeedUseCase getFeedUseCase() {
+            return (FeedUseCase) uc;
+        }
         inline T sigma(T E) { // parametric arc length velocity
             return ph.sigma(E);
         }
         inline T s(T E) { // parametric distance
             return ph.s(E);
         }
-        inline Complex<T> r(T E) { 
+        inline Complex<T> r(T E) {
             return ph.r(E);
         }
         inline T get_tS() { // total traversal time
@@ -350,35 +438,6 @@ class CLASS_DECLSPEC PHFeed {
         };
 
 };
-
-extern int16_t choose5[6];
-extern int16_t choose6[7];
-
-template <class T>
-T Bernstein5(int16_t k, T p) {
-    T result = choose5[k];
-    T p1 = 1 - p;
-    for (int16_t i = 0; i < 5 - k; i++) {
-        result *= p1;
-    }
-    for (int16_t i = 0; i < k; i++) {
-        result *= p;
-    }
-    return result;
-}
-
-template <class T>
-T Bernstein6(int16_t k, T p) {
-    T result = choose6[k];
-    T p1 = 1 - p;
-    for (int16_t i = 0; i < 6 - k; i++) {
-        result *= p1;
-    }
-    for (int16_t i = 0; i < k; i++) {
-        result *= p;
-    }
-    return result;
-}
 
 } // namespace ph5
 

@@ -26,6 +26,12 @@ PH5Curve<T>::PH5Curve(PHVECTOR<Complex<T> > phz, PHVECTOR<Complex<T> > phq) {
 	this->z = phz;
 	this->q = phq;
 	this->N = phz.size() - 1;
+	z1t3mz2 = z[1]*3-z[2];
+	z1pz2 = z[1]+z[2];
+	z1t4 = z[1]*4;
+	zNpzNm1 = z[N]+z[N-1];
+	zNt4 = z[N]*4;
+	zNt3mzNm1 = z[N]*3-z[N-1];
 
 	wi0.push_back(Complex<T>());
 	wi1.push_back(Complex<T>());
@@ -61,11 +67,8 @@ PH5Curve<T>::PH5Curve(PHVECTOR<Complex<T> > phz, PHVECTOR<Complex<T> > phq) {
 		sigmai3.push_back(sigmaij(i,3));
 		sigmai4.push_back(sigmaij(i,4));
 	}
-}
-
-template<class T>
-T PH5Curve<T>::sigma(T p) {
-	return rprime(p).modulus();
+	S = 0;
+	S = s(1);
 }
 
 template<class T>
@@ -78,29 +81,13 @@ Complex<T> PH5Curve<T>::rprime(T p) {
 }
 
 template<class T>
-Complex<T> PH5Curve<T>::ritprime(int16_t i, T p) {
-	Complex<T> sum;
-	T p1 = 1 - p;
-	if (i == 1) {
-		sum.add((z[1]*3-z[2])*p1*p1/2.0);
-		sum.add(z[1]*2*p1*p);
-		sum.add((z[1]+z[2])*p*p/2.0);
-	} else if (i == N) {
-		sum.add((z[N]+z[N-1])*p1*p1/2.0);
-		sum.add(z[N]*2*p1*p);
-		sum.add((z[N]*3-z[N-1])*p*p/2.0);
-	} else {
-		sum.add((z[i-1]+z[i])*p1*p1/2.0);
-		sum.add(z[i]*2*p1*p);
-		sum.add((z[i]+z[i+1])*p*p/2.0);
-	}
-	return sum * sum;
-}
-
-template<class T>
 T PH5Curve<T>::s(T p) {
-	ASSERT(0 <= p);
-	ASSERT(p <= 1);
+	if (p >= 1 && S != 0) {
+		return S;
+	}
+	if (p <= 0) {
+		return 0;
+	}
 	T PN = p * N;
 	int16_t iPN = p == 1 ? N : (((int16_t) PN) + 1);
 	T sum = 0;
@@ -109,43 +96,6 @@ T PH5Curve<T>::s(T p) {
 	}
 	sum += sit(iPN, PN-iPN+1);
 	return sum;
-}
-
-template<class T>
-T PH5Curve<T>::sit(int16_t i, T p) {
-	T sum = 0;
-	for (int16_t k=0; k<=5; k++) {
-		sum += sik(i,k) * Bernstein5(k, p);
-	}
-	return sum;
-}
-
-template<class T>
-T PH5Curve<T>::sik(int16_t i, int16_t k) {
-    T sum = 0;
-    for (int16_t j=0; j<=k-1; j++) {
-        switch (j) {
-        case 0:
-            sum += sigmai0[i];
-            break;
-        case 1:
-            sum += sigmai1[i];
-            break;
-        case 2:
-            sum += sigmai2[i];
-            break;
-        case 3:
-            sum += sigmai3[i];
-            break;
-        case 4:
-            sum += sigmai4[i];
-            break;
-		default:
-			ASSERTFAIL("si?");
-			break;
-        }
-    }
-	return sum/5;
 }
 
 template<class T>

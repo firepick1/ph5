@@ -220,6 +220,61 @@ void test_size() {
 	cout << "sizeof(PHFeed):" << sizeof(PHFeed<PH5TYPE>) << endl;
 }
 
+void test_performance() {
+    PH5Curve<PH5TYPE> ph(ph_arc());
+    PHFeed<PH5TYPE> phf(ph, 100, 0.01);
+    int16_t N = 100; // number of points to interpolate
+    PH5TYPE E = 0; // interpolation normalized parametric state [0,1]
+	int iterations = 1000000;
+
+	int32_t msStart;
+	int32_t msElapsed;
+
+	msStart = millis();
+	PH5TYPE s;
+	PH5TYPE Ekr = 0.35; // arbitrary
+	for (int iter=0; iter<iterations; iter++) {
+		s = ph.s(Ekr); // 269-330ms baseline;  268-330 improved
+	}
+	msElapsed = millis() - msStart;
+	cout << "testPerformance ph.s():" << s << " " << msElapsed << "ms"<< endl;
+
+	msStart = millis();
+	PH5TYPE sigma;
+	for (int iter=0; iter<iterations; iter++) {
+		sigma = ph.sigma(Ekr); // 309-330ms baseline; 205-213 improved
+	}
+	msElapsed = millis() - msStart;
+	cout << "testPerformance ph.sigma():" << sigma << " " << msElapsed << "ms"<< endl;
+
+	msStart = millis();
+	Complex<PH5TYPE> r;
+	for (int iter=0; iter<iterations; iter++) {
+		r = ph.r(Ekr); // 196-210ms baseline
+	}
+	msElapsed = millis() - msStart;
+	cout << "testPerformance ph.r():" << msElapsed << "ms"<< endl;
+
+	msStart = millis();
+	PH5TYPE tau = 0.81;
+	PH5TYPE Ftau;
+	for (int iter=0; iter<iterations; iter++) {
+		Ftau = phf.Ft(tau); // 185-205ms baseline
+	}
+	msElapsed = millis() - msStart;
+	cout << "testPerformance phf.Ft():" << msElapsed << "ms"<< endl;
+
+	msStart = millis();
+	for (int iter=0; iter<1000; iter++) {
+		for (PH5TYPE tPoint = 0; tPoint <= N; tPoint++) {
+			E = phf.Ekt(E, tPoint / N);
+			Complex<PH5TYPE> point = ph.r(E);
+		}
+	}
+	msElapsed = millis() - msStart; // 231-240ms improved
+	cout << "testPerformance phf.Ekt() + ph.r(E):" << msElapsed << endl;
+}
+
 int main(int argc, char *argv[]) {
     LOGINFO3("INFO	: ph5 test v%d.%d.%d", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
     firelog_level(FIRELOG_TRACE);
@@ -230,6 +285,7 @@ int main(int argc, char *argv[]) {
     test_PHFeed();
     test_SamplePHCurve();
 	test_size();
+	test_performance();
 
     cout << "TEST	: END OF TEST main()" << endl;
 }
