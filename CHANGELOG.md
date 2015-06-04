@@ -4,6 +4,10 @@ PH5: change log
 HEAD
 ----
 
+v0.1.5
+------
+* 5 element tinyvector
+
 v0.1
 ------
 * Arduino library

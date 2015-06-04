@@ -4,7 +4,7 @@ echo "SCRIPT	: buildzip"
 echo "HELP	: build zip file for Arduino installation"
 
 TAG=`git log --pretty=format:'%H' -n 1`
-OUTPUT="ph5-$TAG.zip"
+OUTPUT="/home/karl/Downloads/ph5-$TAG.zip"
 echo "STATUS	: creating $OUTPUT"
 
 rm -f $OUTPUT
