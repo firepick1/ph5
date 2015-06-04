@@ -21,7 +21,7 @@
 #ifdef MEMORY_MODEL_TINY
 // MEMORY_MODEL_TINY: We have no room for niceties
 #define PHVECTOR tinyvector
-#define VECTOR_SIZE 3
+#define VECTOR_SIZE 5
 #define PH5TYPE float
 #else
 // MEMORY_MODEL_LARGE: do it right
