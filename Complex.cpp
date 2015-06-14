@@ -1,9 +1,10 @@
-#ifdef CMAKEx
+#ifdef CMAKE
 #include <string.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #endif
+
 #include <math.h>
 #include "version.h"
 #include "ph5.h"
