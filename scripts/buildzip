@@ -11,7 +11,7 @@ rm -f $OUTPUT
 
 cd ..
 
-zip -r $OUTPUT \
+zip -r -q $OUTPUT \
 	ph5/CHANGELOG.md \
 	ph5/LICENSE.md \
 	ph5/README.md \
